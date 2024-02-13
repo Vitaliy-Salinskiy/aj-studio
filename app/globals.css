@@ -47,4 +47,12 @@
       --input: 0 0% 14.9%;
       --ring: 0 72.2% 50.6%;
     }
+}
+
+@layer components {
+
+  .appContainer {
+    @apply container mx-auto px-4 md:px-2 max-w-screen-xl
   }
+
+}

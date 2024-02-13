@@ -1,0 +1,121 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { headerLinks } from "@/constants";
+
+const Header = () => {
+  const [productsCount, setProductsCount] = useState(0);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const res = await fetch("/api/products", {
+        method: "GET",
+      });
+      const data = await res.json();
+      setProductsCount(data);
+    };
+
+    fetchProducts();
+  }, []);
+
+  return (
+    <header>
+      <div className="appContainer">
+        <div className="flex justify-between items-center py-[15px] lg:py-[26px]">
+          <div className="flex items-center gap-2.5 h-[56px]">
+            <Button className="text-[16px] flex items-center justify-center gap-[5px] p-[16px] font-normal rounded-full bg-own-gray text-own-dark-blue hover:bg-own-gray transition-all">
+              <div className="flex gap-[4px] flex-col items-start justify-start h-full">
+                <div className="w-[14px] h-[2px] bg-own-dark-gray rounded-full" />
+                <div className="w-[10px] h-[2px] bg-own-dark-gray rounded-full" />
+              </div>
+              Menu
+            </Button>
+            <div className="relative hidden md:block">
+              <Input
+                className="bg-own-gray focus-visible:ring-transparent pl-[38px] pr-[17px] py-[17px] w-[200px] placeholder:text-own-dark-blue text-[18px] placeholder:text-[18px] text-own-dark-blue rounded-full"
+                placeholder="Search"
+              />
+              <Image
+                src="/search.svg"
+                width={17}
+                height={17}
+                alt="description"
+                className="absolute left-[18px] top-1/2 -translate-y-1/2"
+              />
+            </div>
+          </div>
+
+          <div className="sm:flex-[2] sm:flex justify-center items-center">
+            <div className="flex flex-col justify-center items-center">
+              <Image src="/logo.svg" width={32} height={32} alt="logo" />
+              <h2 className="hidden md:block leading-[35px] font-medium text-[23px]">
+                Studio
+              </h2>
+            </div>
+          </div>
+
+          <div className="gap-[46px] hidden sm:flex">
+            <div className="hidden gap-[30px] items-center sm:flex">
+              {headerLinks.map((link) => {
+                return (
+                  <div className="flex gap-4 items-center" key={link.href}>
+                    <Link href={link.href}>
+                      <Image
+                        src={link.image}
+                        width={18}
+                        height={18}
+                        alt={link.label}
+                      />
+                    </Link>
+                    {link.label === "Cart" && (
+                      <div className="w-[28px] h-[28px] bg-own-red drop-shadow-2xl shadow-2xl shadow-slate-950 rounded-full flex justify-center items-center text-white">
+                        {productsCount}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="hidden gap-2.5 lg:flex">
+              <Select>
+                <SelectTrigger className="w-[69px] h-[30px] bg-own-gray flex gap-[5px] justify-between text-xs text-own-dark-blue rounded-full pr-[6px] pl-[15px] focus-visible:ring-transparent">
+                  <SelectValue placeholder="ENG" />
+                </SelectTrigger>
+                <SelectContent className="w-[69px]">
+                  <SelectItem value="ENG">ENG</SelectItem>
+                  <SelectItem value="UA">UA</SelectItem>
+                  <SelectItem value="PL">PL</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select>
+                <SelectTrigger className="w-[69px] h-[30px] bg-own-gray flex gap-[5px] justify-between text-xs text-own-dark-blue rounded-full pr-[6px] pl-[15px] focus-visible:ring-transparent">
+                  <SelectValue placeholder="USD" />
+                </SelectTrigger>
+                <SelectContent className="w-[69px]">
+                  <SelectItem value="USD">USD</SelectItem>
+                  <SelectItem value="UAH">UAH</SelectItem>
+                  <SelectItem value="PLN">PLN</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
