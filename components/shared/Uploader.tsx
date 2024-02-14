@@ -2,32 +2,40 @@
 
 import { UploadDropzone } from "@/utils/uploadthing";
 import { useToast } from "@/components/ui/use-toast";
+import { useProductStore } from "@/store/productStore";
+import Image from "next/image";
 
 const Uploader = () => {
   const { toast } = useToast();
+  const { setImage, isError, image } = useProductStore();
 
   return (
-    <UploadDropzone
-      appearance={{
-        container: "w-full h-96 mt-0",
-        button: "bg-own-light-red after:bg-red-600/90",
-        label: "text-own-light-red hover:text-red-600",
-        allowedContent: "text-own-dark-blue",
-      }}
-      endpoint="imageUploader"
-      onClientUploadComplete={(res) => {
-        toast({
-          title: "SUCCESS!",
-          description: "Image uploaded successfully",
-        });
-      }}
-      onUploadError={(error: Error) => {
-        toast({
-          title: "ERROR!",
-          description: error.message,
-        });
-      }}
-    />
+    <div className="h-[350px] lg:h-full relative">
+      <UploadDropzone
+        appearance={{
+          container: `w-full h-full mt-0 border-[2px] ${
+            isError ? "border-red-500" : "border-own-dark-blue"
+          }`,
+          button: "bg-own-light-red after:bg-red-600/90",
+          label: "text-own-light-red hover:text-red-600",
+          allowedContent: "text-own-dark-blue",
+        }}
+        endpoint="imageUploader"
+        onClientUploadComplete={(res) => {
+          toast({
+            title: "SUCCESS!",
+            description: "Image uploaded successfully",
+          });
+          setImage(res[0].url);
+        }}
+        onUploadError={(error: Error) => {
+          toast({
+            title: "ERROR!",
+            description: error.message,
+          });
+        }}
+      />
+    </div>
   );
 };
 
