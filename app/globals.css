@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FD4E61;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 @layer base {
     :root {
       --background: 0 0% 100%;
@@ -55,4 +72,24 @@
     @apply container mx-auto px-4 md:px-2 max-w-screen-xl
   }
 
+}
+
+.swiper-scrollbar{
+  bottom: 10px !important;
+
+}
+
+.swiper-scrollbar {
+  width: 40% !important;
+  bottom: 10px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  color: #458ff652;
+}
+
+@media screen and (min-width: 640px) {
+  .swiper-scrollbar{
+    bottom: 30px !important;
+    width: 20% !important;
+  }
 }

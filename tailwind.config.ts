@@ -18,11 +18,20 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        xs: "545px",
+      },
       colors: {
         "own-gray": "#E7E9EB",
         "own-dark-gray": "#677585",
         "own-dark-blue": "#11293B",
         "own-red": "#F67280",
+        "own-light-orange": "#FFE2B5",
+        "own-gold": "#D0AD37",
+        "own-lime": "#7BE498",
+        "own-light-blue": "#458EF6",
+        "own-opacity-blue": "#458ff652",
+        "own-light-red": "#FD4E61",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

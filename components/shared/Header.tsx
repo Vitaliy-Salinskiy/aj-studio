@@ -34,9 +34,9 @@ const Header = () => {
     <header>
       <div className="appContainer">
         <div className="flex justify-between items-center py-[15px] lg:py-[26px]">
-          <div className="flex items-center gap-2.5 h-[56px]">
-            <Button className="text-[16px] flex items-center justify-center gap-[5px] p-[16px] font-normal rounded-full bg-own-gray text-own-dark-blue hover:bg-own-gray transition-all">
-              <div className="flex gap-[4px] flex-col items-start justify-start h-full">
+          <div className="flex items-center gap-2.5">
+            <Button className="text-[18px] flex items-center justify-center gap-[5px] px-[16px] h-[56px] font-normal rounded-full bg-own-gray text-own-dark-blue hover:bg-own-gray transition-all">
+              <div className="flex gap-[4px] flex-col items-start justify-center h-full">
                 <div className="w-[14px] h-[2px] bg-own-dark-gray rounded-full" />
                 <div className="w-[10px] h-[2px] bg-own-dark-gray rounded-full" />
               </div>
@@ -44,7 +44,7 @@ const Header = () => {
             </Button>
             <div className="relative hidden md:block">
               <Input
-                className="bg-own-gray focus-visible:ring-transparent pl-[38px] pr-[17px] py-[17px] w-[200px] placeholder:text-own-dark-blue text-[18px] placeholder:text-[18px] text-own-dark-blue rounded-full"
+                className="bg-own-gray focus-visible:ring-transparent pl-[48px] pr-[22px] py-[17px] w-[200px] placeholder:text-own-dark-blue text-[18px] placeholder:text-[18px] text-own-dark-blue rounded-full h-[56px]"
                 placeholder="Search"
               />
               <Image
@@ -52,7 +52,7 @@ const Header = () => {
                 width={17}
                 height={17}
                 alt="description"
-                className="absolute left-[18px] top-1/2 -translate-y-1/2"
+                className="absolute left-[25px] top-1/2 -translate-y-1/2"
               />
             </div>
           </div>
