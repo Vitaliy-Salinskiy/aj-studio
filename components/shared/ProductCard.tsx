@@ -1,15 +1,28 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 import { MdAddShoppingCart } from "react-icons/md";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const ProductCard = () => {
+  const { data: session } = useSession();
+
   const [activeColor, setActiveColor] = useState();
+
+  const router = useRouter();
+
+  const handleAddToCart = () => {
+    if (session === null) {
+      router.push("/api/auth/signin?callbackUrl=/");
+    }
+  };
 
   return (
     <div className="w-full sm:w-[calc(100%/2-24px)] lg:w-[calc(100%/3-24px)] xl:w-[calc(100%/4-40px)] flex flex-col gap-[32px]">
@@ -34,7 +47,10 @@ const ProductCard = () => {
             ))}
           </div>
         </div>
-        <Button className="w-full mt-[15px] bg-own-gray rounded-full flex gap-[11px] text-own-dark-blue hover:bg-own-gray">
+        <Button
+          onClick={handleAddToCart}
+          className="w-full mt-[15px] bg-own-gray rounded-full flex gap-[11px] text-own-dark-blue hover:bg-own-gray"
+        >
           <MdAddShoppingCart className="text-[#677585]" /> Add to cart
         </Button>
       </div>

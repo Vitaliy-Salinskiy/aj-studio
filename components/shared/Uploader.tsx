@@ -3,7 +3,6 @@
 import { UploadDropzone } from "@/utils/uploadthing";
 import { useToast } from "@/components/ui/use-toast";
 import { useProductStore } from "@/store/productStore";
-import Image from "next/image";
 
 const Uploader = () => {
   const { toast } = useToast();
