@@ -78,6 +78,12 @@
 
 }
 
+.auth-bg{
+  background-image: url('/auth-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .swiper-scrollbar{
   bottom: 10px !important;
 
