@@ -1,5 +1,6 @@
-import { ProductDto } from "@/interfaces";
+import { ProductDto, UserDto } from "@/interfaces";
 import { prisma } from "@/lib/prisma";
+import bcrypt from "bcrypt";
 
 export const getAllProducts = async () => {
   try {
@@ -28,6 +29,26 @@ export const createProduct = async (dto: ProductDto, userId: string) => {
 
     return res;
   } catch (error) {
+    return error;
+  }
+};
+
+export const createUser = async (dto: UserDto) => {
+  try {
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(dto.password, salt);
+
+    dto.password = hashedPassword;
+
+    const res = await prisma.user.create({
+      data: {
+        ...dto,
+      },
+    });
+
+    return res;
+  } catch (error) {
+    console.log("error", (error as Error).message);
     return error;
   }
 };

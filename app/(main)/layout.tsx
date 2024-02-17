@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 
 import Header from "@/components/shared/Header";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Studio Home Page",
@@ -14,9 +12,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const data = await fetch("http://localhost:3000/api/products/count");
+  const productsCount = await data.json();
+
   return (
     <div>
-      <Header />
+      <Header productsCount={productsCount} />
       <main>{children}</main>
     </div>
   );

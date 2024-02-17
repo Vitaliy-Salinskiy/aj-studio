@@ -5,6 +5,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import queryString from "query-string";
 
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -32,6 +33,7 @@ import { Input } from "@/components/ui/input";
 import { loginSchema, registerSchema } from "@/schemas";
 import { IUserForm } from "@/interfaces";
 import { userFormInitialValues } from "@/constants";
+import { redirect } from "next/navigation";
 
 interface CredentialsFormProps {
   isExtended: boolean;
@@ -46,10 +48,28 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
     defaultValues: userFormInitialValues,
   });
 
-  const onSubmit = (data: IUserForm) => {
-    const { confirmPassword, ...dto } = data;
-    console.log(dto);
-    authForm.reset();
+  const onSubmit = async (data: IUserForm) => {
+    if (isExtended) {
+      console.log("By credentials", data);
+      const { confirmPassword, ...dto } = data;
+
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dto),
+      });
+
+      if (res.status === 200) {
+        authForm.reset();
+      }
+    } else {
+      await signIn("credentials", {
+        redirect: true,
+        callbackUrl: `/api/auth/callback/credentials?name=&password=${data.password}&email=${data.email}`,
+      });
+    }
   };
 
   return (
@@ -58,7 +78,7 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
         <h1 className="font-medium text-[40px] leading-[110%]">
           {isExtended ? "Create an account" : "Log in"}
         </h1>
-        <p className="text-gray-500/60 flex gap-[3px] text-base flex-col sm:flex-row">
+        <p className="text-gray-500/60 flex gap-[3px] text-base flex-col sm:flex-row mt-1">
           New to Design Space?
           <Link
             href={isExtended ? "sign-in" : "sign-up"}
@@ -100,12 +120,11 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
                       } focus-visible:ring-transparent !mt-0`}
                     />
                   </FormControl>
-                  {authForm.formState.errors.email &&
-                    authForm.formState.errors.email.message && (
-                      <FormMessage className="!mt-0">
-                        {authForm.formState.errors.email.message}
-                      </FormMessage>
-                    )}
+                  {authForm.formState.errors.email?.message && (
+                    <FormMessage className="!mt-0">
+                      {authForm.formState.errors.email.message}
+                    </FormMessage>
+                  )}
                 </FormItem>
               )}
             />
@@ -113,12 +132,12 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
               <>
                 <FormField
                   control={authForm.control}
-                  name="username"
+                  name="name"
                   render={({ field }) => (
                     <FormItem className="w-full flex flex-col gap-1 h-fit">
                       <FormLabel
                         className={`text-base ${
-                          authForm.formState.errors.username
+                          authForm.formState.errors.name
                             ? "text-red-500"
                             : "text-own-light-gray"
                         }`}
@@ -130,18 +149,17 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
                           {...field}
                           placeholder="Mike Doe"
                           className={`${
-                            authForm.formState.errors.username
+                            authForm.formState.errors.name
                               ? "border-red-500 text-red-500 placeholder:text-red-500"
                               : "border-own-dark-blue"
                           } focus-visible:ring-transparent !mt-0`}
                         />
                       </FormControl>
-                      {authForm.formState.errors.username &&
-                        authForm.formState.errors.username.message && (
-                          <FormMessage className="!mt-0">
-                            {authForm.formState.errors.username.message}
-                          </FormMessage>
-                        )}
+                      {authForm.formState.errors.name?.message && (
+                        <FormMessage className="!mt-0">
+                          {authForm.formState.errors.name.message}
+                        </FormMessage>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -191,12 +209,11 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
                           </PopoverContent>
                         </Popover>
                       </FormControl>
-                      {authForm.formState.errors.dateOfBirth &&
-                        authForm.formState.errors.dateOfBirth.message && (
-                          <FormMessage className="!mt-0">
-                            {authForm.formState.errors.dateOfBirth.message}
-                          </FormMessage>
-                        )}
+                      {authForm.formState.errors.dateOfBirth?.message && (
+                        <FormMessage className="!mt-0">
+                          {authForm.formState.errors.dateOfBirth.message}
+                        </FormMessage>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -241,12 +258,11 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
                       } focus-visible:ring-transparent !mt-0`}
                     />
                   </FormControl>
-                  {authForm.formState.errors.password &&
-                    authForm.formState.errors.password.message && (
-                      <FormMessage className="!mt-0">
-                        {authForm.formState.errors.password.message}
-                      </FormMessage>
-                    )}
+                  {authForm.formState.errors.password?.message && (
+                    <FormMessage className="!mt-0">
+                      {authForm.formState.errors.password.message}
+                    </FormMessage>
+                  )}
                 </FormItem>
               )}
             />
@@ -290,17 +306,18 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
                         } focus-visible:ring-transparent !mt-0`}
                       />
                     </FormControl>
-                    {authForm.formState.errors.confirmPassword &&
-                      authForm.formState.errors.confirmPassword.message && (
-                        <FormMessage className="!mt-0">
-                          {authForm.formState.errors.confirmPassword.message}
-                        </FormMessage>
-                      )}
+                    {authForm.formState.errors.confirmPassword?.message && (
+                      <FormMessage className="!mt-0">
+                        {authForm.formState.errors.confirmPassword.message}
+                      </FormMessage>
+                    )}
                   </FormItem>
                 )}
               />
             )}
-            <p className="text-black underline text-base">Forgot Password?</p>
+            <p className="text-black underline text-base cursor-pointer">
+              Forgot Password?
+            </p>
             <Button className="bg-black hover:bg-black">Login</Button>
           </form>
           <div className="w-full h-0.5 bg-own-light-gray my-4 relative">
@@ -311,13 +328,19 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
           <div className="flex flex-col sm:flex-row justify-between gap-3 mt-4">
             <Button
               className="flex-1 bg-transparent hover:bg-transparent border border-black"
-              onClick={() => signIn("google")}
+              onClick={(e) => {
+                e.preventDefault();
+                signIn("google", { redirect: true });
+              }}
             >
               <FcGoogle className="text-[26px]" />
             </Button>
             <Button
               className="flex-1 bg-transparent hover:bg-transparent border border-black"
-              onClick={() => signIn("github")}
+              onClick={(e) => {
+                e.preventDefault();
+                signIn("github", { redirect: true });
+              }}
             >
               <FaGithub className="text-[26px] text-black" />
             </Button>

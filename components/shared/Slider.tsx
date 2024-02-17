@@ -14,6 +14,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { SliderItem } from "@/components/shared/SliderItem";
+import { slidesList } from "@/constants";
 
 export const Slider = () => {
   return (
@@ -36,16 +37,15 @@ export const Slider = () => {
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
       >
-        {Array(3)
-          .fill(0)
-          .map((_, i) => (
-            <SwiperSlide
-              key={i}
-              className="z-20 bg-own-light-orange rounded-[38px] lg:pl-[74px] px-5 lg:pr-[34px] transition-all duration-700"
-            >
-              <SliderItem />
-            </SwiperSlide>
-          ))}
+        {slidesList.map((slide, index) => (
+          <SwiperSlide
+            key={index}
+            style={{ backgroundColor: slide.color }}
+            className="z-20 rounded-[38px] lg:pl-[74px] px-5 lg:pr-[34px] transition-all duration-700"
+          >
+            <SliderItem {...slide} />
+          </SwiperSlide>
+        ))}
       </Swiper>
       <div className="my-custom-next-button w-[60px] h-[60px] bg-white absolute right-[58px] top-1/2 -translate-y-1/2 z-20 rounded-full justify-center items-center text-[22px] font-normal drop-shadow-xl shadow-black hidden xl:flex">
         <FaArrowRight />

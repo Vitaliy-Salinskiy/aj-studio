@@ -8,9 +8,16 @@ export interface ProductDto {
 
 export interface IUserForm {
   email: string;
-  username: string;
+  name: string;
   password: string;
   confirmPassword: string;
+  dateOfBirth: Date;
+}
+
+export interface UserDto {
+  email: string;
+  name: string;
+  password: string;
   dateOfBirth: Date;
 }
 

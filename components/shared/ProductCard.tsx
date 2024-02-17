@@ -19,7 +19,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div>
         <h3>{product.name}</h3>
         <p className="text-own-light-red text-[19px] flex gap-[6px] mt-[8px]">
-          {product.price} <span className="line-through text-black">$300</span>
+          {product.price}$ <span className="line-through text-black">$300</span>
         </p>
         <div className="flex justify-between items-center mt-[13px]">
           <Badge className="text-own-light-blue bg-own-opacity-blue hover:bg-own-opacity-blue text-[10px]">

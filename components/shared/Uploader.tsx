@@ -6,7 +6,7 @@ import { useProductStore } from "@/store/productStore";
 
 const Uploader = () => {
   const { toast } = useToast();
-  const { setImage, isError, image } = useProductStore();
+  const { setImage, isError } = useProductStore();
 
   return (
     <div className="h-[350px] lg:h-full relative">

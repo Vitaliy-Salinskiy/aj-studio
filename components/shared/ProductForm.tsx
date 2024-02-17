@@ -142,8 +142,7 @@ const ProductForm = () => {
                         } focus-visible:ring-transparent !mt-0`}
                       />
                     </FormControl>
-                    {form.formState.errors.name &&
-                    form.formState.errors.name.message ? (
+                    {form.formState.errors.name?.message ? (
                       <FormMessage className="!mt-0">
                         {form.formState.errors.name.message}
                       </FormMessage>
@@ -173,8 +172,7 @@ const ProductForm = () => {
                         } focus-visible:ring-transparent !mt-0`}
                       />
                     </FormControl>
-                    {form.formState.errors.price &&
-                    form.formState.errors.price.message ? (
+                    {form.formState.errors.price?.message ? (
                       <FormMessage className="!mt-0">
                         {form.formState.errors.price.message}
                       </FormMessage>
@@ -231,7 +229,7 @@ const ProductForm = () => {
                           border: form.formState.errors.colors
                             ? "1px solid red"
                             : "1px solid #11293B",
-                          height: 40,
+                          minHeight: 40,
                           boxShadow: "none",
                           "&:hover": {
                             borderColor: form.formState.errors.colors
@@ -293,8 +291,7 @@ const ProductForm = () => {
                     />
                   </FormControl>
 
-                  {form.formState.errors.colors &&
-                  form.formState.errors.colors.message ? (
+                  {form.formState.errors.colors?.message ? (
                     <FormMessage className="!mt-0">
                       {form.formState.errors.colors.message}
                     </FormMessage>
@@ -323,8 +320,7 @@ const ProductForm = () => {
                       } focus-visible:ring-transparent min-h-[240px] max-h-[240px] !mt-0`}
                     />
                   </FormControl>
-                  {form.formState.errors.description &&
-                  form.formState.errors.description.message ? (
+                  {form.formState.errors.description?.message ? (
                     <FormMessage className="!mt-0">
                       {form.formState.errors.description.message}
                     </FormMessage>

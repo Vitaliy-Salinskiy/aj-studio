@@ -2,7 +2,6 @@
 
 import { signOut } from "next-auth/react";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -17,23 +16,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { headerLinks } from "@/constants";
+import { currencyList, headerLinks, languagesList } from "@/constants";
 
-const Header = () => {
-  const [productsCount, setProductsCount] = useState(0);
+interface HeaderProps {
+  productsCount: number;
+}
+
+const Header = ({ productsCount }: HeaderProps) => {
   const { data: session } = useSession();
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await fetch("/api/products/count", {
-        method: "GET",
-      });
-      const data = await res.json();
-      setProductsCount(data);
-    };
-
-    fetchProducts();
-  }, []);
 
   return (
     <header>
@@ -85,9 +75,11 @@ const Header = () => {
                       >
                         Sign Out
                       </Button>
-                      <Avatar>
+                      <Avatar className="border border-black">
                         {session?.user?.image && (
                           <AvatarImage
+                            width={32}
+                            height={32}
                             src={session?.user?.image}
                             alt="avatar"
                           />
@@ -126,9 +118,11 @@ const Header = () => {
                   <SelectValue placeholder="ENG" />
                 </SelectTrigger>
                 <SelectContent className="w-[69px]">
-                  <SelectItem value="ENG">ENG</SelectItem>
-                  <SelectItem value="UA">UA</SelectItem>
-                  <SelectItem value="PL">PL</SelectItem>
+                  {languagesList.map((language) => (
+                    <SelectItem key={language.value} value={language.value}>
+                      {language.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <Select>
@@ -136,9 +130,11 @@ const Header = () => {
                   <SelectValue placeholder="USD" />
                 </SelectTrigger>
                 <SelectContent className="w-[69px]">
-                  <SelectItem value="USD">USD</SelectItem>
-                  <SelectItem value="UAH">UAH</SelectItem>
-                  <SelectItem value="PLN">PLN</SelectItem>
+                  {currencyList.map((currency) => (
+                    <SelectItem key={currency.value} value={currency.value}>
+                      {currency.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

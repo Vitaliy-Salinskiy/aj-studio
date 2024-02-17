@@ -19,11 +19,24 @@ export const headerLinks = [
   },
 ];
 
+export const languagesList = [
+  { value: "ENG", label: "ENG" },
+  { value: "UA", label: "UA" },
+  { value: "PL", label: "PL" },
+];
+
+export const currencyList = [
+  { value: "USD", label: "USD" },
+  { value: "UAH", label: "UAH" },
+  { value: "PLN", label: "PLN" },
+];
+
 export const colorOptions = [
-  { value: "red", label: "Red" },
-  { value: "green", label: "Green" },
-  { value: "blue", label: "Blue" },
-  { value: "yellow", label: "Yellow" },
+  { value: "#000000", label: "Black" },
+  { value: "#E61800", label: "Red" },
+  { value: "#E67100", label: "Orange" },
+  { value: "#E6C400", label: "Yellow" },
+  { value: "#70B200", label: "Green" },
 ];
 
 export const productFormInitialValues = {
@@ -40,3 +53,30 @@ export const userFormInitialValues = {
   confirmPassword: "",
   dateOfBirth: undefined,
 };
+
+export const slidesList = [
+  {
+    title: "Are you ready to",
+    boldTitle: "lead the way",
+    description: "Luxury meets ultimate sitting comfort",
+    image: "/slide-1.png",
+    path: "/products",
+    color: "#FFDC62",
+  },
+  {
+    title: "Are you ready to",
+    boldTitle: "lead the way",
+    description: "Luxury meets ultimate sitting comfort",
+    image: "/slide-1.png",
+    path: "/products",
+    color: "#FFE2B5",
+  },
+  {
+    title: "Are you ready to",
+    boldTitle: "lead the way",
+    description: "Luxury meets ultimate sitting comfort",
+    image: "/slide-1.png",
+    path: "/products",
+    color: "#D3FBD9",
+  },
+];

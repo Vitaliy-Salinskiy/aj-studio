@@ -1,8 +1,17 @@
 import { z } from "zod";
 
 export const productSchema = z.object({
-  name: z.string().trim().min(2).max(30),
-  description: z.string().trim().min(5).max(2500).optional(),
+  name: z
+    .string()
+    .trim()
+    .min(2, { message: "Name must be at least 2 characters" })
+    .max(30, { message: "Name must be no more than 30 characters" }),
+  description: z
+    .string()
+    .trim()
+    .min(5, { message: "Description must be at least 5 characters" })
+    .max(2500, { message: "Description must be no more than 2500 characters" })
+    .optional(),
   price: z
     .string()
     .transform(parseFloat)
@@ -12,7 +21,9 @@ export const productSchema = z.object({
     .refine((value) => value >= 0.99 && value <= 10000, {
       message: "Price must be between 0.99 and 10000",
     }),
-  colors: z.array(z.any()).min(1),
+  colors: z
+    .array(z.any())
+    .min(1, { message: "At least one color is required" }),
 });
 
 export const loginSchema = z.object({
@@ -26,7 +37,7 @@ export const loginSchema = z.object({
 
 export const registerSchema = loginSchema
   .extend({
-    username: z
+    name: z
       .string()
       .trim()
       .min(3, { message: "Username must be at least 3 characters" })

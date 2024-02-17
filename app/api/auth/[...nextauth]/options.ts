@@ -3,8 +3,10 @@ import GitHubProvider from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import bcrypt from "bcrypt";
 
 import { prisma } from "@/lib/prisma";
+import queryString from "query-string";
 
 export const options: NextAuthOptions = {
   session: {
@@ -39,15 +41,33 @@ export const options: NextAuthOptions = {
         },
       },
       authorize: async (credentials: any): Promise<any> => {
-        const user = { name: "Johndoe", password: "password" };
+        const { email, password } = queryString.parse(credentials.callbackUrl);
 
-        if (
-          credentials?.username === user.name &&
-          credentials?.password === user.password
-        ) {
-          return user;
-        } else {
-          return null;
+        if (email && password) {
+          const user = await prisma.user.findFirst({
+            where: {
+              email: email as string,
+            },
+          });
+
+          if (user) {
+            if (user?.password && password) {
+              const isPasswordsMatch = bcrypt.compareSync(
+                password as string,
+                user?.password as string
+              );
+
+              if (isPasswordsMatch) {
+                return user;
+              } else {
+                return null;
+              }
+            } else {
+              return null;
+            }
+          } else {
+            return null;
+          }
         }
       },
     }),
