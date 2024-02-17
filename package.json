@@ -41,9 +41,6 @@
     "zod": "^3.22.4",
     "zustand": "^4.5.0"
   },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
-  },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",

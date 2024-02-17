@@ -1,18 +1,21 @@
 export const headerLinks = [
   {
-    href: "/",
+    href: "/sign-in",
     label: "Profile",
     image: "/user.svg",
+    withAuth: false,
   },
   {
     href: "/wishlist",
     label: "Wishlist",
     image: "/heart.svg",
+    withAuth: true,
   },
   {
     href: "/cart",
     label: "Cart",
     image: "/cart.svg",
+    withAuth: true,
   },
 ];
 

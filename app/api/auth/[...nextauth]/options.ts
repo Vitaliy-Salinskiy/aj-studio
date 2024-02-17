@@ -58,6 +58,7 @@ export const options: NextAuthOptions = {
     },
     async session({ session, token }) {
       session.user.role = token.role;
+      session.user.id = token.id;
       return session;
     },
     async redirect({ baseUrl }) {

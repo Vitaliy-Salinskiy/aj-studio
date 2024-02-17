@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Select from "react-select";
+import { useSession } from "next-auth/react";
 
 // import Uploader from "@/components/shared/Uploader";
 
@@ -29,6 +30,8 @@ import { productSchema } from "@/schemas";
 import { ProductDto } from "@/interfaces";
 
 const ProductForm = () => {
+  const { data: session } = useSession();
+
   const { toast } = useToast();
   const { image, setError } = useProductStore();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -42,6 +45,14 @@ const ProductForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof productSchema>) => {
+    if (!session?.user?.id) {
+      toast({
+        title: "ERROR!",
+        description: "Please sign in to add a product",
+      });
+      return;
+    }
+
     setError(false);
     setIsDisabled(true);
     if (!file) {
@@ -60,10 +71,28 @@ const ProductForm = () => {
           imageUrl: res.url,
         };
 
-        console.log(productData);
-
-        form.reset(productFormInitialValues);
-        setFile(undefined);
+        try {
+          const response = await fetch("/api/products", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ dto: productData, userId: session.user.id }),
+          });
+          if (response.ok) {
+            form.reset(productFormInitialValues);
+            setFile(undefined);
+            toast({
+              title: "SUCCESS!",
+              description: "Product added successfully",
+            });
+          }
+        } catch (error) {
+          toast({
+            title: "ERROR!",
+            description: (error as Error).message,
+          });
+        }
       } else {
         toast({
           title: "ERROR!",

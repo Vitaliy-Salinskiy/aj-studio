@@ -1,9 +1,10 @@
 "use client";
 
-import { signOut, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -31,7 +32,6 @@ import { Input } from "@/components/ui/input";
 import { loginSchema, registerSchema } from "@/schemas";
 import { IUserForm } from "@/interfaces";
 import { userFormInitialValues } from "@/constants";
-import Link from "next/link";
 
 interface CredentialsFormProps {
   isExtended: boolean;
@@ -61,7 +61,7 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
         <p className="text-gray-500/60 flex gap-[3px] text-base flex-col sm:flex-row">
           New to Design Space?
           <Link
-            href={isExtended ? "sign-up" : "sign-in"}
+            href={isExtended ? "sign-in" : "sign-up"}
             className="underline text-own-dark-black cursor-pointer"
           >
             {isExtended ? "Login" : "Sign up"} for free

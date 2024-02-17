@@ -17,7 +17,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import { headerLinks } from "@/constants";
 
 const Header = () => {
@@ -26,7 +25,7 @@ const Header = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch("/api/products", {
+      const res = await fetch("/api/products/count", {
         method: "GET",
       });
       const data = await res.json();
@@ -74,25 +73,33 @@ const Header = () => {
 
           <div className="gap-[46px] hidden sm:flex">
             <div className="hidden gap-[30px] items-center sm:flex">
-              {session?.user && (
-                <div className="flex gap-2">
-                  <Button
-                    className="bg-black hover:bg-black"
-                    onClick={() => signOut()}
-                  >
-                    Sign Out
-                  </Button>
-                  <Avatar>
-                    {session?.user?.image && (
-                      <AvatarImage src={session?.user?.image} alt="avatar" />
-                    )}
-                    <AvatarFallback className="border border-black bg-own-gray">
-                      {session?.user?.name?.slice(0, 1)}
-                    </AvatarFallback>
-                  </Avatar>
-                </div>
-              )}
               {headerLinks.map((link) => {
+                if (!link.withAuth && session?.user) {
+                  return (
+                    <div className="flex gap-2" key={link.label}>
+                      <Button
+                        className="bg-black hover:bg-black"
+                        onClick={async () => {
+                          await signOut();
+                        }}
+                      >
+                        Sign Out
+                      </Button>
+                      <Avatar>
+                        {session?.user?.image && (
+                          <AvatarImage
+                            src={session?.user?.image}
+                            alt="avatar"
+                          />
+                        )}
+                        <AvatarFallback className="border border-black bg-own-gray">
+                          {session?.user?.name?.slice(0, 1)}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+                  );
+                }
+
                 return (
                   <div className="flex gap-4 items-center" key={link.href}>
                     <Link href={link.href}>
