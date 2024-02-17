@@ -1,4 +1,10 @@
+import { Metadata } from "next";
+
 import ProductForm from "@/components/shared/ProductForm";
+
+export const metadata: Metadata = {
+  title: "Create Product Page",
+};
 
 const page = () => {
   return (

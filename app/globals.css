@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -78,11 +78,23 @@
 
 }
 
-.auth-bg{
-  background-image: url('/auth-bg.png');
+.auth-bg {
+  position: relative;
+  overflow: hidden; 
+}
+
+.auth-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('/bg-auth.png');
   background-size: cover;
   background-repeat: no-repeat;
+  filter: blur(20px); 
+  transform: scale(1.1); 
+  z-index: -1; 
 }
+
 
 .swiper-scrollbar{
   bottom: 10px !important;

@@ -10,6 +10,9 @@ export const options: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/sign-in",
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -23,9 +26,14 @@ export const options: NextAuthOptions = {
     Credentials({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "johndoe" },
+        email: {
+          label: "Your Email",
+          type: "email",
+          placeholder: "jhondoe@gmail.com",
+        },
+
         password: {
-          label: "Password",
+          label: "Your Password",
           type: "password",
           placeholder: "********",
         },
@@ -51,6 +59,9 @@ export const options: NextAuthOptions = {
     async session({ session, token }) {
       session.user.role = token.role;
       return session;
+    },
+    async redirect({ baseUrl }) {
+      return baseUrl;
     },
   },
 };

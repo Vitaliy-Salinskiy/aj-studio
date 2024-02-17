@@ -1,8 +1,11 @@
 "use client";
 
+import { signOut } from "next-auth/react";
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 import {
   Select,
@@ -13,10 +16,13 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import { headerLinks } from "@/constants";
 
 const Header = () => {
   const [productsCount, setProductsCount] = useState(0);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -68,6 +74,24 @@ const Header = () => {
 
           <div className="gap-[46px] hidden sm:flex">
             <div className="hidden gap-[30px] items-center sm:flex">
+              {session?.user && (
+                <div className="flex gap-2">
+                  <Button
+                    className="bg-black hover:bg-black"
+                    onClick={() => signOut()}
+                  >
+                    Sign Out
+                  </Button>
+                  <Avatar>
+                    {session?.user?.image && (
+                      <AvatarImage src={session?.user?.image} alt="avatar" />
+                    )}
+                    <AvatarFallback className="border border-black bg-own-gray">
+                      {session?.user?.name?.slice(0, 1)}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+              )}
               {headerLinks.map((link) => {
                 return (
                   <div className="flex gap-4 items-center" key={link.href}>

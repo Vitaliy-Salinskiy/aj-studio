@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 import "./globals.css";
 import AuthProvider from "@/context/AuthProvider";
+import { EdgeStoreProvider } from "@/context/EdgeStoreProvider";
 
 const inter = Inter({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -29,9 +30,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-          <Toaster />
-          {children}
+          <EdgeStoreProvider>
+            <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+            <Toaster />
+            {children}
+          </EdgeStoreProvider>
         </AuthProvider>
       </body>
     </html>
