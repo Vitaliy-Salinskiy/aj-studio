@@ -61,7 +61,8 @@ export const slidesList = [
     description: "Luxury meets ultimate sitting comfort",
     image: "/slide-1.png",
     path: "/products",
-    color: "#FFDC62",
+    bgColor: "#FFDC62",
+    color: "#FFC703",
   },
   {
     title: "Are you ready to",
@@ -69,7 +70,8 @@ export const slidesList = [
     description: "Luxury meets ultimate sitting comfort",
     image: "/slide-1.png",
     path: "/products",
-    color: "#FFE2B5",
+    bgColor: "#FFE2B5",
+    color: "#F5CF94",
   },
   {
     title: "Are you ready to",
@@ -77,6 +79,7 @@ export const slidesList = [
     description: "Luxury meets ultimate sitting comfort",
     image: "/slide-1.png",
     path: "/products",
-    color: "#D3FBD9",
+    bgColor: "#D3FBD9",
+    color: "#8DFF9E",
   },
 ];

@@ -8,6 +8,7 @@ export default async function Home() {
   });
 
   const products: IProduct[] = await data.json();
+
   return (
     <>
       <Slider />

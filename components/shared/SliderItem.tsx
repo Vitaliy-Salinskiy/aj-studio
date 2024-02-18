@@ -8,6 +8,7 @@ interface SliderItemProps {
   boldTitle: string;
   description: string;
   image: string;
+  color: string;
 }
 
 export const SliderItem = ({
@@ -15,6 +16,7 @@ export const SliderItem = ({
   boldTitle,
   description,
   image,
+  color,
 }: SliderItemProps) => {
   return (
     <>
@@ -32,7 +34,18 @@ export const SliderItem = ({
           </Button>
         </div>
         <div className="hidden lg:flex w-[45%] h-[calc(100%-40px)] relative mt-auto">
-          <Image src={image} alt={title + description + image} fill />
+          <Image
+            src={image}
+            alt={title + description + image}
+            fill
+            className="z-20"
+          />
+          <p
+            className="absolute right-0 top-1/2 -translate-y-1/2 font-bold text-[354px] z-10 hidden 2xl:block tracking-tight"
+            style={{ color: color }}
+          >
+            Hot
+          </p>
         </div>
       </div>
     </>

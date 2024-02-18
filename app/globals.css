@@ -112,7 +112,13 @@
 @media screen and (min-width: 640px) {
   .swiper-scrollbar{
     bottom: 30px !important;
-    width: 20% !important;
+    width: 30% !important;
+  }
+}
+
+@media screen and (min-width: 1224px) {
+  .swiper-scrollbar{
+    width: 13% !important;
   }
 }
 

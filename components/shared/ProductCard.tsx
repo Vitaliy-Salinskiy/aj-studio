@@ -13,8 +13,16 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className="w-full sm:w-[calc(100%/2-12px)] lg:w-[calc(100%/3-27px)] xl:w-[calc(100%/4-30px)] flex flex-col gap-[32px]">
-      <div className="h-[282px] bg-own-lime rounded-3xl flex justify-center items-center">
+      <div className="h-[282px] bg-own-lime rounded-3xl flex justify-center items-center relative overflow-hidden">
         <Image src={product.imageUrl} alt="shoe-1" width={275} height={282} />
+        <div className="absolute left-0 top-0 flex text-[#FFFEC8] text-[10px] font-bold">
+          <div className="w-[59px] h-[31px] bg-[#E76300] text-white text-center flex justify-start pl-4 items-center rounded-ee-[40px] z-[2]">
+            NEW
+          </div>
+          <div className="w-[74px] h-[31px] bg-[#0077FF] text-white text-center flex justify-end pr-5 items-center rounded-ee-[26px] z-[1] -translate-x-[27px]">
+            HOT
+          </div>
+        </div>
       </div>
       <div>
         <h3>{product.name}</h3>
