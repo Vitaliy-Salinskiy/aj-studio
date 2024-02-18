@@ -53,12 +53,15 @@ const Header = ({ productsCount }: HeaderProps) => {
           </div>
 
           <div className="sm:flex-[2] sm:flex justify-center items-center">
-            <div className="flex flex-col justify-center items-center">
+            <Link
+              href="/"
+              className="flex flex-col justify-center items-center cursor-pointer"
+            >
               <Image src="/logo.svg" width={32} height={32} alt="logo" />
               <h2 className="hidden md:block leading-[35px] font-medium text-[23px]">
                 Studio
               </h2>
-            </div>
+            </Link>
           </div>
 
           <div className="gap-[46px] hidden sm:flex">

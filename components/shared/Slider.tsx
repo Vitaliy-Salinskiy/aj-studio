@@ -63,7 +63,7 @@ export const Slider = () => {
       <div className="my-custom-pagination absolute bottom-12 z-10 left-1/2 -translate-x-1/2 gap-4 hidden xl:flex">
         {slidesList.map((_, i) => (
           <div
-            className={`relative border-[3.5px] border-white h-20 w-20 ${
+            className={`relative border-[3.5px] border-white h-20 w-20 select-none ${
               activeSlide === i ? "bg-[#FDC20B]" : "bg-[#FCD7B5]"
             } rounded-lg transition-all duration-300 cursor-pointer hover:scale-105 active:scale-90`}
             key={i}

@@ -43,8 +43,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
             ))}
           </div>
         </div>
-        {/* <Link href={`/products/${product.id}`}> */}
-        <Link href={`https://buy.stripe.com/test_28o03d3zX7U49UYbII`}>
+        <Link href={`/products/${product.id}`}>
+          {/* <Link href={`https://buy.stripe.com/test_28o03d3zX7U49UYbII`}> */}
           <Button className="text-[20px] font-normal w-full h-auto py-3 mt-[15px] bg-own-gray rounded-full flex gap-[8px] text-own-dark-blue hover:bg-own-gray">
             <MdAddShoppingCart className="text-[#677585] text-[18px]" /> Add to
             cart
