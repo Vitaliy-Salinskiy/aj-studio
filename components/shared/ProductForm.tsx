@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useProductStore } from "@/store/productStore";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Select from "react-select";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // import Uploader from "@/components/shared/Uploader";
 
@@ -27,22 +28,62 @@ import { Input } from "@/components/ui/input";
 import { SingleImageDropzone } from "@/components/shared/EdgeStoreDropZone";
 import { colorOptions, productFormInitialValues } from "@/constants";
 import { productSchema } from "@/schemas";
-import { ProductDto } from "@/interfaces";
+import { IProduct, ProductDto } from "@/interfaces";
 
-const ProductForm = () => {
-  const { data: session } = useSession();
+interface ProductFormProps {
+  product?: IProduct;
+}
+
+const ProductForm = ({ product }: ProductFormProps) => {
+  const { data: session, status } = useSession();
+
+  const router = useRouter();
 
   const { toast } = useToast();
   const { image, setError } = useProductStore();
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<any>();
   const { edgestore } = useEdgeStore();
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     mode: "onChange",
+    defaultValues: {
+      name: product?.name,
+      price: `${product?.price}` as any,
+      colors: colorOptions.filter((option) =>
+        product?.colors?.includes(option.value)
+      ),
+      description: product?.description,
+    },
   });
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/");
+      toast({
+        title: "ERROR!",
+        description: "You have be to authenticated to see that page",
+      });
+    }
+
+    if (status === "authenticated" && product) {
+      if (product.userId !== session?.user?.id) {
+        router.push("/");
+        toast({
+          title: "ERROR!",
+          description: "You can only edit your products",
+        });
+      }
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (product?.imageUrl) {
+      setFile(product.imageUrl);
+    }
+  }, [image]);
 
   const onSubmit = async (data: z.infer<typeof productSchema>) => {
     if (!session?.user?.id) {
@@ -62,30 +103,23 @@ const ProductForm = () => {
       });
       setError(true);
     } else {
-      const res = await edgestore.publicFiles.upload({ file });
+      let res;
+      if (typeof file !== "string") {
+        res = await edgestore.publicFiles.upload({ file });
+      }
 
-      if (res.url) {
+      if (res?.url || product?.imageUrl) {
         const productData: ProductDto = {
           ...data,
           colors: data.colors.map((color) => color.value),
-          imageUrl: res.url,
+          imageUrl: product?.imageUrl ? product.imageUrl : (res?.url as string),
         };
 
         try {
-          const response = await fetch("/api/products", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ dto: productData, userId: session.user.id }),
-          });
-          if (response.ok) {
-            form.reset(productFormInitialValues);
-            setFile(undefined);
-            toast({
-              title: "SUCCESS!",
-              description: "Product added successfully",
-            });
+          if (!product) {
+            await createProduct(productData, session?.user?.id);
+          } else {
+            await updateProduct(product.id, productData, session?.user?.id);
           }
         } catch (error) {
           toast({
@@ -101,6 +135,53 @@ const ProductForm = () => {
       }
     }
     setIsDisabled(false);
+  };
+
+  const createProduct = async (dto: ProductDto, id: string) => {
+    console.log("dto", dto, id);
+    const response = await fetch("/api/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        dto,
+        userId: id,
+      }),
+    });
+    if (response.ok) {
+      form.reset(productFormInitialValues);
+      setFile(undefined);
+      toast({
+        title: "SUCCESS!",
+        description: "Product added successfully",
+      });
+    }
+  };
+
+  const updateProduct = async (
+    id: string,
+    dto: Partial<ProductDto>,
+    userId: string
+  ) => {
+    const response = await fetch(`/api/products/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        dto,
+      }),
+    });
+    if (response.ok) {
+      form.reset(productFormInitialValues);
+      setFile(undefined);
+      toast({
+        title: "SUCCESS!",
+        description: "Product updated successfully",
+      });
+      router.push("/");
+    }
   };
 
   return (
@@ -134,6 +215,7 @@ const ProductForm = () => {
                     <FormControl>
                       <Input
                         {...field}
+                        value={field.value}
                         placeholder="New Jeans"
                         className={`${
                           form.formState.errors.name
@@ -338,7 +420,7 @@ const ProductForm = () => {
           disabled={isDisabled}
           className="bg-black text-white transition-transform hover:bg-black duration-300 active:scale-[0.99]"
         >
-          {isDisabled ? "Loading..." : "Add Product"}
+          {isDisabled ? "Loading..." : product ? "Edit Product" : "Add Product"}
         </Button>
       </form>
     </Form>

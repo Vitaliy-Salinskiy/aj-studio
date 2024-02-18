@@ -12,7 +12,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const data = await fetch("http://localhost:3000/api/products/count");
+  const data = await fetch("http://localhost:3000/api/products/count", {
+    cache: "no-cache",
+  });
   const productsCount = await data.json();
 
   return (

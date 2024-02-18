@@ -5,9 +5,12 @@ import { IProduct } from "@/interfaces";
 export default async function Home() {
   const data = await fetch("http://localhost:3000/api/products", {
     method: "GET",
+    cache: "no-cache",
   });
 
   const products: IProduct[] = await data.json();
+
+  console.log(products);
 
   return (
     <>
