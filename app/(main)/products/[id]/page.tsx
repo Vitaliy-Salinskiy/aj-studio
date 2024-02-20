@@ -4,13 +4,16 @@ import { MdOutlineBookmarkAdd } from "react-icons/md";
 
 import { IProduct } from "@/interfaces";
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 const page = async (url: any) => {
   const { id } = url.params;
   const data = await fetch(`http://localhost:3000/api/products/${id}`);
   const product: IProduct = await data.json();
 
-  console.log(product);
+  if (!product.id) {
+    redirect("/");
+  }
 
   return (
     <section>
