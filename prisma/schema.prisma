@@ -10,19 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id          String   @id @default(uuid())
-  name        String
-  price       Float
-  colors      String[]
-  description String?
-  imageUrl    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userId], references: [id])
-  userId      String
-}
-
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -51,17 +38,19 @@ model Session {
 }
 
 model User {
-  id              String    @id @default(cuid())
+  id              String      @id @default(cuid())
   name            String?
-  email           String?   @unique
+  email           String?     @unique
   password        String?
   dateOfBirth     DateTime?
   emailVerified   DateTime?
   image           String?
-  role            String    @default("user")
+  role            String      @default("user")
   createdProducts Product[]
   accounts        Account[]
   sessions        Session[]
+  OrderItem       OrderItem[]
+  Order           Order[]
 }
 
 model VerificationToken {
@@ -70,4 +59,47 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  name        String
+  price       Float
+  colors      String[]
+  description String?
+  imageUrl    String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  User        User        @relation(fields: [userId], references: [id])
+  userId      String
+  OrderItem   OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  productId String
+  quantity  Int
+  userId    String
+  color     String
+  orderId   String?
+  Order     Order?  @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  userId    String
+  status    Status[]    @default([PENDING])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  user      User        @relation(fields: [userId], references: [id])
+  orderItem OrderItem[]
+}
+
+enum Status {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
 }

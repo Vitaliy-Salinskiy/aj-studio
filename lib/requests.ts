@@ -1,4 +1,4 @@
-import { ProductDto, UserDto } from "@/interfaces";
+import { OrderItemDto, ProductDto, UserDto } from "@/interfaces";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 
@@ -78,5 +78,23 @@ export const createUser = async (dto: UserDto) => {
     return res;
   } catch (error) {
     return error;
+  }
+};
+
+export const createOrderItem = async (dto: OrderItemDto) => {
+  try {
+    const res = await prisma.orderItem.create({
+      data: {
+        color: dto.color,
+        quantity: dto.quantity,
+        userId: dto.userId,
+        productId: dto.productId,
+      },
+    });
+
+    return res;
+  } catch (error) {
+    console.error("Error in createOrderItem:", error);
+    throw error;
   }
 };

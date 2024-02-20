@@ -6,6 +6,13 @@ export interface ProductDto {
   description?: string;
 }
 
+export interface OrderItemDto {
+  userId: string;
+  productId: string;
+  color: string;
+  quantity: number;
+}
+
 export interface IUserForm {
   email: string;
   name: string;
