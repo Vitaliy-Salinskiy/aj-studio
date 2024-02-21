@@ -43,8 +43,6 @@ const ProductController = ({ product }: ProductControllerProps) => {
       body: JSON.stringify({ dto }),
     });
 
-    const data = await res.json();
-
     if (res.ok) {
       toast({
         title: "Added to cart",

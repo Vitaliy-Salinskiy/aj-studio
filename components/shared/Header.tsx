@@ -20,11 +20,10 @@ import { currencyList, headerLinks, languagesList } from "@/constants";
 
 interface HeaderProps {
   productsCount: number;
+  session: any;
 }
 
-const Header = ({ productsCount }: HeaderProps) => {
-  const { data: session } = useSession();
-
+const Header = ({ productsCount, session }: HeaderProps) => {
   return (
     <header>
       <div className="appContainer">

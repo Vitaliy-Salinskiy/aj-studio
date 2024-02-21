@@ -98,3 +98,16 @@ export const createOrderItem = async (dto: OrderItemDto) => {
     throw error;
   }
 };
+
+export const getAllOrdersItems = async () => {
+  try {
+    return await prisma.orderItem.findMany({
+      include: {
+        product: true,
+        user: true,
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+};

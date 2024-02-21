@@ -1,3 +1,8 @@
+import { CgProfile } from "react-icons/cg";
+import { BsFillBox2HeartFill } from "react-icons/bs";
+import { FaBox } from "react-icons/fa";
+import { IoSettings } from "react-icons/io5";
+
 export const headerLinks = [
   {
     href: "/sign-in",
@@ -81,5 +86,28 @@ export const slidesList = [
     path: "/products",
     bgColor: "#D3FBD9",
     color: "#8DFF9E",
+  },
+];
+
+export const profileTabs = [
+  {
+    label: "Profile",
+    path: "/profile",
+    icons: CgProfile,
+  },
+  {
+    label: "Orders",
+    path: "/profile/orders",
+    icons: FaBox,
+  },
+  {
+    label: "Wishlist",
+    path: "/profile/wishlist",
+    icons: BsFillBox2HeartFill,
+  },
+  {
+    label: "Settings",
+    path: "/profile/settings",
+    icons: IoSettings,
   },
 ];

@@ -1,5 +1,5 @@
 import { OrderItemDto } from "@/interfaces";
-import { createOrderItem } from "@/lib/requests";
+import { createOrderItem, getAllOrdersItems } from "@/lib/requests";
 
 export const POST = async (request: Request) => {
   const body: { dto: OrderItemDto } = await request.json();
@@ -15,4 +15,14 @@ export const POST = async (request: Request) => {
   const res = await createOrderItem(dto);
 
   return new Response(JSON.stringify({ orderItem: res }), { status: 200 });
+};
+
+export const GET = async () => {
+  try {
+    const ordersItems = await getAllOrdersItems();
+
+    return new Response(JSON.stringify(ordersItems), { status: 200 });
+  } catch (error) {
+    return error;
+  }
 };
