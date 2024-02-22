@@ -6,7 +6,7 @@ export const getAllProducts = async () => {
   try {
     return await prisma.product.findMany();
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
@@ -14,22 +14,20 @@ export const getProductsCount = async () => {
   try {
     return await prisma.product.count();
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
 export const createProduct = async (dto: ProductDto, userId: string) => {
   try {
-    const res = await prisma.product.create({
+    return await prisma.product.create({
       data: {
         ...dto,
         userId,
       },
     });
-
-    return res;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
@@ -47,7 +45,7 @@ export const getProductById = async (id: string) => {
 
 export const updateProduct = async (id: string, dto: Partial<ProductDto>) => {
   try {
-    const res = await prisma.product.update({
+    return await prisma.product.update({
       where: {
         id,
       },
@@ -55,8 +53,6 @@ export const updateProduct = async (id: string, dto: Partial<ProductDto>) => {
         ...dto,
       },
     });
-
-    return res;
   } catch (error) {
     return error;
   }
@@ -69,45 +65,88 @@ export const createUser = async (dto: UserDto) => {
 
     dto.password = hashedPassword;
 
-    const res = await prisma.user.create({
+    return await prisma.user.create({
       data: {
         ...dto,
       },
     });
-
-    return res;
   } catch (error) {
     return error;
   }
 };
 
-export const createOrderItem = async (dto: OrderItemDto) => {
+export const createOrderItem = async (dto: OrderItemDto, userId: string) => {
   try {
-    const res = await prisma.orderItem.create({
+    return await prisma.orderItem.create({
       data: {
         color: dto.color,
         quantity: dto.quantity,
-        userId: dto.userId,
+        userId,
         productId: dto.productId,
       },
     });
-
-    return res;
   } catch (error) {
     console.error("Error in createOrderItem:", error);
     throw error;
   }
 };
 
-export const getAllOrdersItems = async () => {
+export const getOrdersItemsByUserId = async (id: string) => {
   try {
-    return await prisma.orderItem.findMany({
+    console.log("id", id);
+    const ordersItems = await prisma.orderItem.findMany({
+      where: {
+        userId: id,
+      },
       include: {
         product: true,
         user: true,
       },
     });
+
+    return ordersItems;
   } catch (error) {
-    return error;
+    throw error;
+  }
+};
+
+export const countOrderItems = async (id: string) => {
+  try {
+    const count = await prisma.orderItem.count({
+      where: {
+        userId: id,
+      },
+    });
+
+    return count;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createOrder = async (userId: string, orderItems: string[]) => {
+  try {
+    return await prisma.order.create({
+      data: {
+        userId,
+        orderItem: {
+          connect: orderItems.map((id) => ({ id })),
+        },
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteProductFromCart = async (productId: string) => {
+  try {
+    return await prisma.orderItem.delete({
+      where: {
+        id: productId,
+      },
+    });
+  } catch (error) {
+    throw error;
   }
 };

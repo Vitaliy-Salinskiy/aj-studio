@@ -8,6 +8,7 @@ import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { IProduct, OrderItemDto } from "@/interfaces";
+import { useRouter } from "next/navigation";
 
 interface ProductControllerProps {
   product: IProduct;
@@ -15,7 +16,9 @@ interface ProductControllerProps {
 
 const ProductController = ({ product }: ProductControllerProps) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const { toast } = useToast();
+
   const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -30,15 +33,13 @@ const ProductController = ({ product }: ProductControllerProps) => {
   };
 
   const handleAddToCart = async (): Promise<void> => {
-    console.log("Add to cart");
     const dto: OrderItemDto = {
       productId: product.id,
-      userId: session?.user.id!,
       color: selectedColor,
       quantity,
     };
 
-    const res = await fetch("/api/orders/item", {
+    const res = await fetch(`/api/orders/item/${session?.user.id}`, {
       method: "POST",
       body: JSON.stringify({ dto }),
     });
@@ -48,6 +49,9 @@ const ProductController = ({ product }: ProductControllerProps) => {
         title: "Added to cart",
         description: "Product added to cart successfully",
       });
+      setSelectedColor(product.colors[0]);
+      setQuantity(1);
+      router.refresh();
     } else {
       toast({
         title: "Added to cart",

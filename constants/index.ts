@@ -1,6 +1,6 @@
 import { CgProfile } from "react-icons/cg";
 import { BsFillBox2HeartFill } from "react-icons/bs";
-import { FaBox } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
 
 export const headerLinks = [
@@ -11,13 +11,13 @@ export const headerLinks = [
     withAuth: false,
   },
   {
-    href: "/wishlist",
+    href: "/profile/wishlist",
     label: "Wishlist",
     image: "/heart.svg",
     withAuth: true,
   },
   {
-    href: "/cart",
+    href: "/profile/cart",
     label: "Cart",
     image: "/cart.svg",
     withAuth: true,
@@ -96,9 +96,9 @@ export const profileTabs = [
     icons: CgProfile,
   },
   {
-    label: "Orders",
-    path: "/profile/orders",
-    icons: FaBox,
+    label: "Cart",
+    path: "/profile/cart",
+    icons: FaShoppingCart,
   },
   {
     label: "Wishlist",

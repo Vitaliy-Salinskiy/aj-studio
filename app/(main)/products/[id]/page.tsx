@@ -5,6 +5,18 @@ import Image from "next/image";
 import { IProduct } from "@/interfaces";
 import ProductController from "@/components/shared/ProductController";
 
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const data = await fetch(`http://localhost:3000/api/products/${id}`);
+  const product: IProduct = await data.json();
+
+  if (!product.id) {
+    redirect("/");
+  }
+
+  return { title: product.name };
+}
+
 const page = async (url: any) => {
   const { id } = url.params;
   const data = await fetch(`http://localhost:3000/api/products/${id}`);

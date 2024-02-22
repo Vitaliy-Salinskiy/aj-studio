@@ -14,15 +14,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const data = await fetch("http://localhost:3000/api/products/count", {
-    cache: "no-cache",
-  });
-  const productsCount = await data.json();
   const session = await getServerSession(options);
+
+  const data = await fetch(
+    `http://localhost:3000/api/orders/item/${session?.user.id}/count`
+  );
+  const productsCount = await data.json();
 
   return (
     <div>
-      <Header productsCount={productsCount} session={session} />
+      <Header
+        productsCount={session?.user.id ? productsCount : 0}
+        session={session}
+      />
       <main>{children}</main>
     </div>
   );

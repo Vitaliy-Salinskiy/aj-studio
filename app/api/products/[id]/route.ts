@@ -1,6 +1,5 @@
-import { getServerSession } from "next-auth";
-
 import { getProductById, updateProduct } from "@/lib/requests";
+import { revalidatePath } from "next/cache";
 
 export const GET = async (
   request: Request,
@@ -34,6 +33,12 @@ export const PUT = async (
   if (!updatedProduct) {
     return Response.json({ error: "Product not found" }, { status: 404 });
   }
+
+  revalidatePath("/(main)", "layout");
+  revalidatePath("/(main)/products/[id]", "page");
+  revalidatePath("/(main)/products/update/[id]", "page");
+  revalidatePath("/(main)/profile/wishlist", "page");
+  revalidatePath("/(main)/profile/cart", "page");
 
   return Response.json(updatedProduct);
 };

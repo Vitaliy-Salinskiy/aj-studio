@@ -156,6 +156,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
         title: "SUCCESS!",
         description: "Product added successfully",
       });
+      router.refresh();
     }
   };
 
@@ -180,6 +181,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
         title: "SUCCESS!",
         description: "Product updated successfully",
       });
+      router.refresh();
       router.push("/");
     }
   };

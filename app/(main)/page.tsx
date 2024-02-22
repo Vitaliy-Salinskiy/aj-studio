@@ -8,16 +8,10 @@ import { IProduct } from "@/interfaces";
 import { getServerSession } from "next-auth";
 
 export default async function Home() {
-  const data = await fetch("http://localhost:3000/api/products", {
-    method: "GET",
-    cache: "no-cache",
-  });
+  const data = await fetch("http://localhost:3000/api/products");
 
   const session = await getServerSession();
   const products: IProduct[] = await data.json();
-
-  console.log(products);
-  console.log(session);
 
   return (
     <>

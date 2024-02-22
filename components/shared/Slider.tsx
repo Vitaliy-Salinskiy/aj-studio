@@ -23,12 +23,11 @@ export const Slider = () => {
   return (
     <section className="max-w-[1875px] mx-auto h-[320px] md:h-[440px] relative">
       <Swiper
-        modules={[Navigation, Scrollbar]}
-        className="flex h-full relative"
         slidesPerView={1.15}
         centeredSlides
         initialSlide={1}
-        defaultValue={2}
+        onSwiper={setSwiper}
+        className="flex h-full relative"
         onSlideChange={(swiper) => {
           setActiveSlide(swiper.activeIndex);
           swiper.activeIndex === 1;
@@ -36,12 +35,12 @@ export const Slider = () => {
         slideActiveClass="scale-100"
         slideNextClass="!scale-[0.97]"
         slidePrevClass="!scale-[0.97]"
+        modules={[Navigation, Scrollbar]}
         navigation={{
           nextEl: ".my-custom-next-button",
           prevEl: ".my-custom-prev-button",
         }}
-        scrollbar={{ draggable: true }}
-        onSwiper={setSwiper}
+        scrollbar={{ draggable: false }}
       >
         {slidesList.map((slide, index) => (
           <SwiperSlide

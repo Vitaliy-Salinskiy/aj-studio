@@ -1,21 +1,42 @@
 "use client";
 
-import { ExtendedOrderItem } from "@/interfaces";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
+import { ExtendedOrderItem } from "@/interfaces";
+import { useToast } from "@/components/ui/use-toast";
 
 interface OrderItemProps {
   orderItem: ExtendedOrderItem;
+  userId: string;
 }
 
 const OrderItem = ({ orderItem }: OrderItemProps) => {
+  const { toast } = useToast();
   const router = useRouter();
 
-  console.log(orderItem);
+  const handleRemove = async () => {
+    const res = await fetch(`/api/orders/item/${orderItem.id}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      toast({
+        title: "Your cart",
+        description: `Product was deleted successfully`,
+      });
+      router.refresh();
+    } else {
+      toast({
+        title: "Your cart",
+        description: "Something went wrong... Please try again later",
+      });
+    }
+  };
+
   return (
-    <div className="flex flex-col border-gray-300 border-b pb-5">
+    <div className={`flex flex-col border-gray-300 border-b pb-5`}>
       <div className="flex justify-between items-center">
         <div className="flex gap-2 flex-[3]">
           <Image
@@ -43,26 +64,14 @@ const OrderItem = ({ orderItem }: OrderItemProps) => {
         </h4>
 
         <div className="flex flex-col gap-2">
-          {!orderItem.orderId ? (
-            <Button className="border border-black bg-transparent hover:bg-black text-black hover:text-white">
-              Confirm an order
-            </Button>
-          ) : (
-            <Button
-              onClick={() => router.push(`/orders/${orderItem.orderId}`)}
-              className="border border-black bg-transparent hover:bg-black text-black hover:text-white"
-            >
-              View Order
-            </Button>
-          )}
-          {orderItem.orderId && (
-            <Button className="border border-red-500 hover:bg-transparent hover:text-red-500">
-              Cancel Order
-            </Button>
-          )}
+          <Button
+            className="border border-red-500 hover:bg-transparent hover:text-red-500"
+            onClick={async () => await handleRemove()}
+          >
+            Remove from cart
+          </Button>
         </div>
       </div>
-      <div></div>
     </div>
   );
 };

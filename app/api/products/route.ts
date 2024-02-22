@@ -17,8 +17,7 @@ export const POST = async (request: Request) => {
   if (!newProduct)
     return new Response("Failed to create product", { status: 500 });
 
-  revalidatePath("/products/create");
-  revalidatePath("/");
+  revalidatePath("/(main)/", "layout");
 
   return new Response(JSON.stringify(newProduct));
 };

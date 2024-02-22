@@ -9,7 +9,6 @@ export interface ProductDto {
 }
 
 export interface OrderItemDto {
-  userId: string;
   productId: string;
   color: string;
   quantity: number;

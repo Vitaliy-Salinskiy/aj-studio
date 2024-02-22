@@ -16,7 +16,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { currencyList, headerLinks, languagesList } from "@/constants";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  currencyList,
+  headerLinks,
+  languagesList,
+  profileTabs,
+} from "@/constants";
+import { useRouter } from "next/navigation";
 
 interface HeaderProps {
   productsCount: number;
@@ -24,6 +39,8 @@ interface HeaderProps {
 }
 
 const Header = ({ productsCount, session }: HeaderProps) => {
+  const router = useRouter();
+
   return (
     <header>
       <div className="appContainer">
@@ -69,27 +86,51 @@ const Header = ({ productsCount, session }: HeaderProps) => {
                 if (!link.withAuth && session?.user) {
                   return (
                     <div className="flex gap-2" key={link.label}>
-                      <Button
-                        className="bg-black hover:bg-black"
-                        onClick={async () => {
-                          await signOut();
-                        }}
-                      >
-                        Sign Out
-                      </Button>
-                      <Avatar className="border border-black">
-                        {session?.user?.image && (
-                          <AvatarImage
-                            width={32}
-                            height={32}
-                            src={session?.user?.image}
-                            alt="avatar"
-                          />
-                        )}
-                        <AvatarFallback className="border border-black bg-own-gray">
-                          {session?.user?.name?.slice(0, 1)}
-                        </AvatarFallback>
-                      </Avatar>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Avatar className="border border-black cursor-pointer">
+                            {session?.user?.image && (
+                              <AvatarImage
+                                width={32}
+                                height={32}
+                                src={session?.user?.image}
+                                alt="avatar"
+                              />
+                            )}
+                            <AvatarFallback className="border border-black bg-own-gray">
+                              {session?.user?.name?.slice(0, 1)}
+                            </AvatarFallback>
+                          </Avatar>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuGroup>
+                            {profileTabs.map((tab) => (
+                              <DropdownMenuItem
+                                key={tab.path}
+                                onClick={() => router.push(tab.path)}
+                              >
+                                {tab.label}
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuGroup>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() =>
+                              router.replace(
+                                "https://github.com/Vitaliy-Salinskiy"
+                              )
+                            }
+                          >
+                            My GitHub
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => signOut()}>
+                            Log out
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   );
                 }
