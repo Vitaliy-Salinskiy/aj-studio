@@ -1,8 +1,7 @@
+import { Product as IProduct } from "@prisma/client";
 import { redirect } from "next/navigation";
-
 import Image from "next/image";
 
-import { IProduct } from "@/interfaces";
 import ProductController from "@/components/shared/ProductController";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {

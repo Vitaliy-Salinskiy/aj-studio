@@ -4,24 +4,68 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { IProduct } from "@/interfaces";
+import { Product as IProduct } from "@prisma/client";
 
 interface ProductCardProps {
   product: IProduct;
+  isShrink?: boolean;
+  averageSales?: number;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({
+  product,
+  isShrink = false,
+  averageSales,
+}: ProductCardProps) => {
+  let tags = [];
+  const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+
+  if (
+    new Date().getTime() - new Date(product.createdAt).getTime() <
+    oneDayInMilliseconds
+  ) {
+    tags.push("NEW");
+  }
+
+  if (averageSales && averageSales + 2 > product.sales) {
+    tags.push("HOT");
+  }
+
   return (
-    <div className="w-full sm:w-[calc(100%/2-12px)] lg:w-[calc(100%/3-27px)] xl:w-[calc(100%/4-30px)] flex flex-col gap-[32px]">
+    <div
+      className={`w-full sm:w-[calc(100%/2-12px)] lg:w-[calc(100%/3-27px)] ${
+        isShrink ? "" : "xl:w-[calc(100%/4-30px)]"
+      } flex flex-col gap-[32px]`}
+    >
       <div className="h-[282px] bg-own-lime rounded-3xl flex justify-center items-center relative overflow-hidden">
         <Image src={product.imageUrl} alt="shoe-1" width={275} height={282} />
         <div className="absolute left-0 top-0 flex text-[#FFFEC8] text-[10px] font-bold">
-          <div className="w-[59px] h-[31px] bg-[#E76300] text-white text-center flex justify-start pl-4 items-center rounded-ee-[40px] z-[2]">
-            NEW
-          </div>
-          <div className="w-[74px] h-[31px] bg-[#0077FF] text-white text-center flex justify-end pr-5 items-center rounded-ee-[26px] z-[1] -translate-x-[27px]">
-            HOT
-          </div>
+          {tags.length > 0 &&
+            tags.map((tag, i) => {
+              if (i === 0) {
+                return (
+                  <div
+                    className={`uppercase w-[59px] h-[31px]  ${
+                      tag === "NEW" ? "bg-[#E76300]" : "bg-[#0077FF]"
+                    } text-white text-center flex justify-start pl-4 items-center rounded-ee-[40px] z-[2]`}
+                  >
+                    {tag}
+                  </div>
+                );
+              }
+
+              if (i === 1) {
+                return (
+                  <div
+                    className={`uppercase w-[74px] h-[31px] ${
+                      tag === "HOT" ? "bg-[#E76300]" : "bg-[#0077FF]"
+                    } text-white text-center flex justify-end pr-5 items-center rounded-ee-[26px] z-[1] -translate-x-[27px]`}
+                  >
+                    {tag}
+                  </div>
+                );
+              }
+            })}
         </div>
       </div>
       <div>

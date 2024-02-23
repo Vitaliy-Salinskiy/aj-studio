@@ -4,14 +4,22 @@ import { BiSolidAddToQueue } from "react-icons/bi";
 
 import ProductCard from "@/components/shared/ProductCard";
 import { Slider } from "@/components/shared/Slider";
-import { IProduct } from "@/interfaces";
 import { getServerSession } from "next-auth";
+import { Product as IProduct } from "@prisma/client";
 
 export default async function Home() {
-  const data = await fetch("http://localhost:3000/api/products");
+  const data = await fetch("http://localhost:3000/api/products", {
+    cache: "no-cache",
+  });
 
   const session = await getServerSession();
   const products: IProduct[] = await data.json();
+
+  const totalSales = products.reduce((acc, product) => acc + product.sales, 0);
+
+  console.log(totalSales);
+
+  const averageSales = totalSales / products.length;
 
   return (
     <>
@@ -33,7 +41,11 @@ export default async function Home() {
         <div className="flex gap-6 lg:gap-10 flex-wrap">
           {products.length >= 1 ? (
             products.map((product, index: number) => (
-              <ProductCard key={index} product={product} />
+              <ProductCard
+                key={index}
+                product={product}
+                averageSales={averageSales}
+              />
             ))
           ) : (
             <h3 className="text-xl font-bold">No products found</h3>

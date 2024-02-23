@@ -53,3 +53,14 @@ export const registerSchema = loginSchema
     message: "Passwords should match",
     path: ["confirmPassword"],
   });
+
+export const profileSchema = z.object({
+  name: z.string(),
+  bio: z.string(),
+  profileImage: z.string().url(),
+  address: z.string(),
+  email: z.string().email(),
+  emailVerified: z.boolean(),
+  dataOfBirth: z.date(),
+  phoneNumber: z.string(),
+});

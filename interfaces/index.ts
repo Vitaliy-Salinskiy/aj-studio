@@ -1,4 +1,4 @@
-import { OrderItem, Product, User } from "@prisma/client";
+import { OrderItem, Product, User, Wishlist } from "@prisma/client";
 
 export interface ProductDto {
   name: string;
@@ -29,19 +29,11 @@ export interface UserDto {
   dateOfBirth: Date;
 }
 
-export interface IProduct {
-  id: string;
-  name: string;
-  price: number;
-  colors: string[];
-  description?: string;
-  imageUrl: string;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
-}
-
 export interface ExtendedOrderItem extends OrderItem {
   user: User;
+  product: Product;
+}
+
+export interface ExtendedWishlist extends Wishlist {
   product: Product;
 }

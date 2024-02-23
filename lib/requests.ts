@@ -150,3 +150,43 @@ export const deleteProductFromCart = async (productId: string) => {
     throw error;
   }
 };
+
+export const addItemToWishlist = async (productId: string, userId: string) => {
+  try {
+    return await prisma.wishlist.create({
+      data: {
+        productId,
+        userId,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getWishedItemsByUserId = async (id: string) => {
+  try {
+    return await prisma.wishlist.findMany({
+      where: {
+        userId: id,
+      },
+      include: {
+        product: true,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserById = async (id: string) => {
+  try {
+    return await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};

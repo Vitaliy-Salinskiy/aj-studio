@@ -9,8 +9,7 @@ import { z } from "zod";
 import Select from "react-select";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
-// import Uploader from "@/components/shared/Uploader";
+import { Product as IProduct } from "@prisma/client";
 
 import { useEdgeStore } from "@/context/EdgeStoreProvider";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,7 @@ import { Input } from "@/components/ui/input";
 import { SingleImageDropzone } from "@/components/shared/EdgeStoreDropZone";
 import { colorOptions, productFormInitialValues } from "@/constants";
 import { productSchema } from "@/schemas";
-import { IProduct, ProductDto } from "@/interfaces";
+import { ProductDto } from "@/interfaces";
 
 interface ProductFormProps {
   product?: IProduct;
@@ -55,7 +54,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
       colors: colorOptions.filter((option) =>
         product?.colors?.includes(option.value)
       ),
-      description: product?.description,
+      description: product?.description || undefined,
     },
   });
 

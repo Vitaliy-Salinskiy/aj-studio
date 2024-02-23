@@ -1,27 +1,27 @@
 "use client";
 
+import { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Scrollbar, Autoplay } from "swiper/modules";
 import Image from "next/image";
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa6";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Scrollbar } from "swiper/modules";
+import { slidesList } from "@/constants";
+import { SliderItem } from "@/components/shared/SliderItem";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { SliderItem } from "@/components/shared/SliderItem";
-import { slidesList } from "@/constants";
-import { useState } from "react";
 
 export const Slider = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [swiper, setSwiper] = useState<any>();
 
   return (
-    <section className="max-w-[1875px] mx-auto h-[320px] md:h-[440px] relative">
+    <section className="max-w-[1925px] mx-auto h-[320px] md:h-[440px] relative">
       <Swiper
         slidesPerView={1.15}
         centeredSlides
@@ -32,10 +32,15 @@ export const Slider = () => {
           setActiveSlide(swiper.activeIndex);
           swiper.activeIndex === 1;
         }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: true,
+          waitForTransition: true,
+        }}
         slideActiveClass="scale-100"
         slideNextClass="!scale-[0.97]"
         slidePrevClass="!scale-[0.97]"
-        modules={[Navigation, Scrollbar]}
+        modules={[Navigation, Scrollbar, Autoplay]}
         navigation={{
           nextEl: ".my-custom-next-button",
           prevEl: ".my-custom-prev-button",

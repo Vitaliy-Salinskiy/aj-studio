@@ -2,6 +2,7 @@ import { CgProfile } from "react-icons/cg";
 import { BsFillBox2HeartFill } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
+import { MdSimCardDownload } from "react-icons/md";
 
 export const headerLinks = [
   {
@@ -104,6 +105,11 @@ export const profileTabs = [
     label: "Wishlist",
     path: "/profile/wishlist",
     icons: BsFillBox2HeartFill,
+  },
+  {
+    label: "Your Products",
+    path: "/profile/products",
+    icons: MdSimCardDownload,
   },
   {
     label: "Settings",

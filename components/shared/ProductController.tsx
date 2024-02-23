@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Product as IProduct } from "@prisma/client";
 import { useSession } from "next-auth/react";
 
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { IProduct, OrderItemDto } from "@/interfaces";
-import { useRouter } from "next/navigation";
+import { OrderItemDto } from "@/interfaces";
 
 interface ProductControllerProps {
   product: IProduct;
@@ -56,6 +57,30 @@ const ProductController = ({ product }: ProductControllerProps) => {
       toast({
         title: "Added to cart",
         description: "Something went wrong",
+      });
+    }
+  };
+
+  const handleWishlist = async (): Promise<void> => {
+    const data = {
+      userId: session?.user.id,
+      productId: product.id,
+    };
+
+    const res = await fetch("/api/wishlist", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      toast({
+        title: "Added to wishlist",
+        description: "Product added to wishlist successfully",
+      });
+    } else {
+      toast({
+        title: "Added to wishlist",
+        description: "Product already in wishlist",
       });
     }
   };
@@ -110,9 +135,12 @@ const ProductController = ({ product }: ProductControllerProps) => {
             </Button>
           </div>
 
-          <div className="ml-auto border h-12 w-12 rounded-lg border-black hover:bg-black transition-colors hover:text-red-500 flex justify-center items-center cursor-pointer">
+          <Button
+            className="ml-auto border h-12 w-12 rounded-lg border-black hover:bg-black transition-colors hover:text-red-500 flex justify-center items-center cursor-pointer p-0 bg-transparent text-black"
+            onClick={() => handleWishlist()}
+          >
             <MdOutlineBookmarkAdd className="text-xl transition-colors duration-100" />
-          </div>
+          </Button>
         </div>
       </div>
     </>
