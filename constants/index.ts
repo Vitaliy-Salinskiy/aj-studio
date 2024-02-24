@@ -76,8 +76,8 @@ export const slidesList = [
     description: "Luxury meets ultimate sitting comfort",
     image: "/slide-1.png",
     path: "/products",
-    bgColor: "#FFE2B5",
-    color: "#F5CF94",
+    bgColor: "#D3FBD9",
+    color: "#8DFF9E",
   },
   {
     title: "Are you ready to",
@@ -85,8 +85,8 @@ export const slidesList = [
     description: "Luxury meets ultimate sitting comfort",
     image: "/slide-1.png",
     path: "/products",
-    bgColor: "#D3FBD9",
-    color: "#8DFF9E",
+    bgColor: "#FFE2B5",
+    color: "#F5CF94",
   },
 ];
 
@@ -117,3 +117,5 @@ export const profileTabs = [
     icons: IoSettings,
   },
 ];
+
+export const cardColors = ["#7BE498", "#F5E6FF", "#F7C29B", "#68EAEB"];

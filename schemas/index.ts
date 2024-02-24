@@ -1,4 +1,5 @@
 import { z } from "zod";
+import parsePhoneNumber from "libphonenumber-js";
 
 export const productSchema = z.object({
   name: z
@@ -54,13 +55,42 @@ export const registerSchema = loginSchema
     path: ["confirmPassword"],
   });
 
+const phoneNumberSchema = z.string().refine(
+  (phoneNumber) => {
+    const phoneNumberObject = parsePhoneNumber(phoneNumber);
+    return phoneNumberObject ? phoneNumberObject.isValid() : false;
+  },
+  {
+    message: "Invalid phone number",
+  }
+);
+
+const addressSchema = z
+  .string()
+  .refine(
+    (address) => {
+      const parts = address.split(",").map((part) => part.trim());
+      return parts.length >= 3;
+    },
+    {
+      message: "Address must contain a street, city, and country",
+    }
+  )
+  .optional();
+
 export const profileSchema = z.object({
-  name: z.string(),
-  bio: z.string(),
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters" })
+    .max(32, { message: "Name must be at most 32 characters" }),
+  bio: z
+    .string()
+    .min(25, { message: "Bio must be at least 25 characters" })
+    .max(2500, { message: "Bio must be at most 2500 characters" })
+    .optional(),
   profileImage: z.string().url(),
-  address: z.string(),
+  address: addressSchema,
   email: z.string().email(),
-  emailVerified: z.boolean(),
-  dataOfBirth: z.date(),
-  phoneNumber: z.string(),
+  dateOfBirth: z.date().optional(),
+  phoneNumber: phoneNumberSchema,
 });

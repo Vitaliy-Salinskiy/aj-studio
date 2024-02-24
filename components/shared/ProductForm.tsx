@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useProductStore } from "@/store/productStore";
 import { useToast } from "@/components/ui/use-toast";

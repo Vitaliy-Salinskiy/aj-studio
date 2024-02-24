@@ -190,3 +190,15 @@ export const getUserById = async (id: string) => {
     throw error;
   }
 };
+
+export const getOwnedProducts = async (id: string) => {
+  try {
+    return await prisma.product.findMany({
+      where: {
+        userId: id,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};

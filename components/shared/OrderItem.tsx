@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ExtendedOrderItem } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
+import { getDiscountPrice } from "@/utils";
 
 interface OrderItemProps {
   orderItem: ExtendedOrderItem;
@@ -59,8 +60,26 @@ const OrderItem = ({ orderItem }: OrderItemProps) => {
           </div>
         </div>
 
-        <h4 className="font-bold flex-1">
-          ${orderItem.product.price * orderItem.quantity}
+        <h4 className="font-bold flex-1 flex gap-2">
+          {orderItem.product.discount > 0 && (
+            <span>
+              {getDiscountPrice(
+                orderItem.product.price,
+                orderItem.product.discount,
+                orderItem.quantity
+              )}
+              $
+            </span>
+          )}
+          <span
+            className={`${
+              orderItem.product.discount
+                ? "text-own-light-red line-through"
+                : ""
+            }`}
+          >
+            {orderItem.product.price * orderItem.quantity}$
+          </span>
         </h4>
 
         <div className="flex flex-col gap-2">

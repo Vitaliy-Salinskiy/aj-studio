@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Product as IProduct } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -10,6 +10,7 @@ import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { OrderItemDto } from "@/interfaces";
+import { getDiscountPrice } from "@/utils";
 
 interface ProductControllerProps {
   product: IProduct;
@@ -21,7 +22,14 @@ const ProductController = ({ product }: ProductControllerProps) => {
   const { toast } = useToast();
 
   const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
+  const [discountPrice, setDiscountPrice] = useState<string>();
   const [quantity, setQuantity] = useState<number>(1);
+
+  useEffect(() => {
+    setDiscountPrice(
+      getDiscountPrice(product.price, product.discount, quantity)
+    );
+  }, [quantity]);
 
   const handleQuantity = (type: "inc" | "dec") => {
     if (type === "inc") {
@@ -103,7 +111,18 @@ const ProductController = ({ product }: ProductControllerProps) => {
         </div>
       </div>
       <h2 className="text-2xl font-semibold">
-        Price: <span>{product.price * quantity}$</span>
+        Price:{" "}
+        {product.discount > 0 && (
+          <span className="text-own-light-red">
+            {!discountPrice
+              ? getDiscountPrice(product.price, product.discount)
+              : discountPrice}
+            $
+          </span>
+        )}{" "}
+        <span className={`${product.discount > 0 ? "line-through" : ""}`}>
+          {product.price * quantity}$
+        </span>
       </h2>
       <div className="flex flex-col sm:flex-row gap-5 w-full mt-auto">
         <div className="flex text-xl border border-black rounded-lg w-[120px] h-[50px]">

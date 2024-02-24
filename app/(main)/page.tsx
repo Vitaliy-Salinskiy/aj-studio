@@ -6,8 +6,9 @@ import ProductCard from "@/components/shared/ProductCard";
 import { Slider } from "@/components/shared/Slider";
 import { getServerSession } from "next-auth";
 import { Product as IProduct } from "@prisma/client";
+import { cardColors } from "@/constants";
 
-export default async function Home() {
+export default async function Home(url: any) {
   const data = await fetch("http://localhost:3000/api/products", {
     cache: "no-cache",
   });
@@ -17,9 +18,7 @@ export default async function Home() {
 
   const totalSales = products.reduce((acc, product) => acc + product.sales, 0);
 
-  console.log(totalSales);
-
-  const averageSales = totalSales / products.length;
+  const averageSales = (totalSales / products.length) * 1.25;
 
   return (
     <>
@@ -45,6 +44,8 @@ export default async function Home() {
                 key={index}
                 product={product}
                 averageSales={averageSales}
+                color={cardColors[index % cardColors.length]}
+                url={url}
               />
             ))
           ) : (

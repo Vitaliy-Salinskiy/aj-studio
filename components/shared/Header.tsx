@@ -4,7 +4,6 @@ import { signOut } from "next-auth/react";
 
 import Link from "next/link";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 
 import {
   Select,
@@ -31,7 +30,8 @@ import {
   languagesList,
   profileTabs,
 } from "@/constants";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 interface HeaderProps {
   productsCount: number;
@@ -40,7 +40,42 @@ interface HeaderProps {
 
 const Header = ({ productsCount, session }: HeaderProps) => {
   const router = useRouter();
+  const pathName = usePathname();
+  const searchParams = useSearchParams();
 
+  useEffect(() => {
+    onLanguageChange("ENG");
+    onCurrencyChange("USD");
+  }, []);
+
+  const setQueryAndPush = (key: string, value: string | null) => {
+    const currentQuery = new URLSearchParams(
+      Array.from(searchParams.entries())
+    );
+
+    if (value) {
+      currentQuery.set(key, value);
+    } else {
+      currentQuery.delete(key);
+    }
+
+    const newQuery = currentQuery.toString();
+    const query = newQuery ? `?${newQuery}` : "";
+
+    router.push(`${pathName}${query}`);
+  };
+
+  const onLanguageChange = (value: string) => {
+    setQueryAndPush("lang", value);
+  };
+
+  const onCurrencyChange = (value: string) => {
+    setQueryAndPush("currency", value);
+  };
+
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQueryAndPush("search", e.target.value || null);
+  };
   return (
     <header>
       <div className="appContainer">
@@ -55,6 +90,7 @@ const Header = ({ productsCount, session }: HeaderProps) => {
             </Button>
             <div className="relative hidden md:block">
               <Input
+                onChange={onInputChange}
                 className="bg-own-gray focus-visible:ring-transparent pl-[48px] pr-[22px] py-[17px] w-[200px] placeholder:text-own-dark-blue text-[18px] placeholder:text-[18px] text-own-dark-blue rounded-full h-[56px]"
                 placeholder="Search"
               />
@@ -156,7 +192,7 @@ const Header = ({ productsCount, session }: HeaderProps) => {
             </div>
 
             <div className="hidden gap-2.5 lg:flex">
-              <Select>
+              <Select onValueChange={onLanguageChange}>
                 <SelectTrigger className="w-[69px] h-[30px] bg-own-gray flex gap-[5px] justify-between text-xs text-own-dark-blue rounded-full pr-[6px] pl-[15px] focus-visible:ring-transparent">
                   <SelectValue placeholder="ENG" />
                 </SelectTrigger>
@@ -168,7 +204,7 @@ const Header = ({ productsCount, session }: HeaderProps) => {
                   ))}
                 </SelectContent>
               </Select>
-              <Select>
+              <Select onValueChange={onCurrencyChange}>
                 <SelectTrigger className="w-[69px] h-[30px] bg-own-gray flex gap-[5px] justify-between text-xs text-own-dark-blue rounded-full pr-[6px] pl-[15px] focus-visible:ring-transparent">
                   <SelectValue placeholder="USD" />
                 </SelectTrigger>

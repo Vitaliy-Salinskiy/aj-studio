@@ -12,15 +12,23 @@ interface CartContainerProps {
 }
 
 const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
-  const [total, setTotal] = useState(0);
+  const [totals, setTotals] = useState({ discount: 0, total: 0 });
 
   useEffect(() => {
-    setTotal(
-      ordersItems.reduce(
-        (acc, item) => acc + item.product.price * item.quantity,
-        0
-      )
+    const newTotals = ordersItems.reduce(
+      (acc, item) => {
+        const discountedPrice =
+          item.product.price -
+          (item.product.price * item.product.discount) / 100;
+        return {
+          discount: acc.discount + discountedPrice * item.quantity,
+          total: acc.total + item.product.price * item.quantity,
+        };
+      },
+      { discount: 0, total: 0 }
     );
+
+    setTotals(newTotals);
   }, [ordersItems]);
 
   return (
@@ -40,7 +48,19 @@ const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
       </div>
       {ordersItems.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h2 className="text-[29px] font-bold">Total: {total}$</h2>
+          <h2 className="text-[29px] font-bold flex gap-2">
+            Total:{" "}
+            {Number(totals.discount.toFixed()) !== totals.total ? (
+              <span>
+                {totals.discount.toFixed()}${" "}
+                <span className="text-own-light-red line-through">
+                  {totals.total}$
+                </span>
+              </span>
+            ) : (
+              `${totals.total}$`
+            )}
+          </h2>
           <Button className="bg-black hover:bg-black transition-transform active:scale-95 duration-200">
             Make an order
           </Button>
