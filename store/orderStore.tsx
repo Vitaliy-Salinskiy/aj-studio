@@ -3,16 +3,13 @@ import { devtools } from "zustand/middleware";
 import { OrderItem } from "@prisma/client";
 
 interface IOrderStore {
-  items: string[];
-  setItems: (items: OrderItem) => void;
-  resetItems: () => void;
+  isDisabled: boolean;
+  setIsDisabled: () => void;
 }
 
 export const useOrderStore = create(
   devtools<IOrderStore>((set) => ({
-    items: [],
-    setItems: (item: OrderItem) =>
-      set((state) => ({ items: [...state.items, item.id] })),
-    resetItems: () => set({ items: [] }),
+    isDisabled: false,
+    setIsDisabled: () => set((state) => ({ isDisabled: !state.isDisabled })),
   }))
 );

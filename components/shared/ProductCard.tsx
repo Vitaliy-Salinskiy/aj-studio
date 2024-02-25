@@ -12,7 +12,7 @@ interface ProductCardProps {
   isShrink?: boolean;
   averageSales?: number;
   color: string;
-  url: any;
+  url?: any;
 }
 
 const ProductCard = async ({

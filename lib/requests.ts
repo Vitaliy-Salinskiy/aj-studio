@@ -31,6 +31,18 @@ export const createProduct = async (dto: ProductDto, userId: string) => {
   }
 };
 
+export const deleteProduct = async (id: string) => {
+  try {
+    return await prisma.product.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getProductById = async (id: string) => {
   try {
     return await prisma.product.findUnique({

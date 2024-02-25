@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Product as IProduct } from "@prisma/client";
 
 import { options } from "@/app/api/auth/[...nextauth]/options";
+import OwnedProduct from "@/components/shared/OwnedProduct";
+
+export const metadata: Metadata = {
+  title: "Studio | Your products",
+  description: "Your products page",
+};
 
 const page = async () => {
   const session = await getServerSession(options);
@@ -14,13 +21,9 @@ const page = async () => {
 
   return (
     <section>
-      <div className="flex">
+      <div className="flex flex-col gap-2">
         {products.map((product: IProduct) => (
-          <div key={product.id}>
-            <img src={product.imageUrl} alt={product.name} />
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
-          </div>
+          <OwnedProduct key={product.id} product={product} />
         ))}
       </div>
     </section>
