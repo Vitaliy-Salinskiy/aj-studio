@@ -73,7 +73,7 @@
 @layer components {
 
   .appContainer {
-    @apply container mx-auto px-4 md:px-2 max-w-screen-xl
+    @apply container mx-auto px-4 md:px-2 max-w-[1380px]
   }
 
 }

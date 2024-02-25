@@ -192,7 +192,7 @@ const Header = ({ productsCount, session }: HeaderProps) => {
             </div>
 
             <div className="hidden gap-2.5 lg:flex">
-              <Select onValueChange={onLanguageChange}>
+              <Select onValueChange={onLanguageChange} defaultValue="ENG">
                 <SelectTrigger className="w-[69px] h-[30px] bg-own-gray flex gap-[5px] justify-between text-xs text-own-dark-blue rounded-full pr-[6px] pl-[15px] focus-visible:ring-transparent">
                   <SelectValue placeholder="ENG" />
                 </SelectTrigger>
@@ -204,9 +204,9 @@ const Header = ({ productsCount, session }: HeaderProps) => {
                   ))}
                 </SelectContent>
               </Select>
-              <Select onValueChange={onCurrencyChange}>
+              <Select onValueChange={onCurrencyChange} defaultValue="USD">
                 <SelectTrigger className="w-[69px] h-[30px] bg-own-gray flex gap-[5px] justify-between text-xs text-own-dark-blue rounded-full pr-[6px] pl-[15px] focus-visible:ring-transparent">
-                  <SelectValue placeholder="USD" />
+                  <SelectValue placeholder="USD" defaultValue="USD" />
                 </SelectTrigger>
                 <SelectContent className="w-[69px]">
                   {currencyList.map((currency) => (

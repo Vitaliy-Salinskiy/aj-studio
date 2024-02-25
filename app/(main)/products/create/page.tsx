@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ProductForm from "@/components/shared/ProductForm";
 
 export const metadata: Metadata = {
-  title: "Create Product Page",
+  title: "Studio | Create Product",
 };
 
 const page = () => {

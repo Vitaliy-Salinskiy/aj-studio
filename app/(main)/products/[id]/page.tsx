@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     redirect("/");
   }
 
-  return { title: product.name };
+  return { title: `Studio | ${product.name}` };
 }
 
 const page = async (url: any) => {

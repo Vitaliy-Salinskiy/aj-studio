@@ -1,10 +1,16 @@
 import { getServerSession } from "next-auth";
+import { Product as IProduct } from "@prisma/client";
+import type { Metadata } from "next";
 
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { ExtendedWishlist } from "@/interfaces";
 import ProductCard from "@/components/shared/ProductCard";
-import { Product as IProduct } from "@prisma/client";
 import { cardColors } from "@/constants";
+
+export const metadata: Metadata = {
+  title: "Studio | Wishlist Page",
+  description: "Wishlist Page",
+};
 
 const page = async () => {
   const session = await getServerSession(options);

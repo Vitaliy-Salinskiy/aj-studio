@@ -28,13 +28,11 @@ export const headerLinks = [
 export const languagesList = [
   { value: "ENG", label: "ENG" },
   { value: "UA", label: "UA" },
-  { value: "PL", label: "PL" },
 ];
 
 export const currencyList = [
   { value: "USD", label: "USD" },
   { value: "UAH", label: "UAH" },
-  { value: "PLN", label: "PLN" },
 ];
 
 export const colorOptions = [
@@ -119,3 +117,71 @@ export const profileTabs = [
 ];
 
 export const cardColors = ["#7BE498", "#F5E6FF", "#F7C29B", "#68EAEB"];
+
+export const discountRate = [0, 5, 10, 15, 20, 25, 50, 75];
+
+export const footerFeatures = [
+  {
+    title: "Categories",
+    subtitles: ["Cufflink", "Evening Dress", "Pumps", "Umbrella", "Sari"],
+  },
+  {
+    title: "More",
+    subtitles: [
+      "Column Two",
+      "Down-padded Coat",
+      "Sandals",
+      "Brooch",
+      "Scarf",
+      "Ring",
+    ],
+  },
+  {
+    title: "About",
+    subtitles: [
+      "Contact Us",
+      "About Us",
+      "Support/Help",
+      "FAQ",
+      "Terms and Conditions",
+    ],
+  },
+];
+
+import { FaFacebook } from "react-icons/fa";
+import { AiFillTwitterCircle } from "react-icons/ai";
+import { RiInstagramFill } from "react-icons/ri";
+import { FaLinkedin } from "react-icons/fa";
+
+export const socials = [
+  {
+    name: "Facebook",
+    icon: FaFacebook,
+    link: "https://facebook.com",
+    color: "#3b5998",
+  },
+  {
+    name: "Twitter",
+    icon: AiFillTwitterCircle,
+    link: "https://twitter.com",
+    color: "#1da1f2",
+  },
+  {
+    name: "Instagram",
+    icon: RiInstagramFill,
+    link: "https://instagram.com",
+    color: "#c32aa3",
+  },
+  {
+    name: "LinkedIn",
+    icon: FaLinkedin,
+    link: "https://linkedin.com",
+    color: "#0077b5",
+  },
+];
+
+export const footerCopyrights = [
+  "Privacy Policy",
+  "Terms of Service",
+  "Cookies Settings",
+];

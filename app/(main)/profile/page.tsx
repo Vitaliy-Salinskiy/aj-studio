@@ -1,5 +1,6 @@
 "use client";
 
+import type { Metadata } from "next";
 import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

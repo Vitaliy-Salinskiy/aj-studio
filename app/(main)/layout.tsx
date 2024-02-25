@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-
-import Header from "@/components/shared/Header";
 import { getServerSession } from "next-auth";
+
 import { options } from "@/app/api/auth/[...nextauth]/options";
+import Header from "@/components/shared/Header";
+import Footer from "@/components/shared/Footer";
 
 export const metadata: Metadata = {
-  title: "Studio Home Page",
+  title: "Studio | Home Page",
   description: "Studio Home Web Shop for Shoes",
 };
 
@@ -28,6 +29,7 @@ export default async function RootLayout({
         session={session}
       />
       <main>{children}</main>
+      <Footer />
     </div>
   );
 }

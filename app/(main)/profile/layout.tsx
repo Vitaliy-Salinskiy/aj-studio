@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { profileTabs } from "@/constants";
 
 export const metadata: Metadata = {
-  title: "Studio Profile Page",
+  title: "Studio | Profile Page",
   description: "Studio Home Web Shop for Shoes",
 };
 

@@ -1,11 +1,11 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import ProductForm from "@/components/shared/ProductForm";
 
 export const metadata: Metadata = {
-  title: "Edit Product Page",
+  title: "Studio | Edit Product",
 };
 
 const page = async (url: any) => {
@@ -16,7 +16,7 @@ const page = async (url: any) => {
 
   const product = await data.json();
 
-  if (product.error || !session?.user.id) {
+  if (product.error) {
     redirect("/");
   }
 
