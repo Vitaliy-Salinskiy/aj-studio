@@ -20,7 +20,6 @@ const ProductCard = async ({
   isShrink = false,
   averageSales,
   color,
-  url,
 }: ProductCardProps) => {
   let tags = [];
   const oneDayInMilliseconds = 24 * 60 * 60 * 1000;

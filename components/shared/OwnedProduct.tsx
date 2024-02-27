@@ -16,6 +16,17 @@ import { discountRate } from "@/constants";
 import { useOrderStore } from "@/store/orderStore";
 import { getDiscountPrice } from "@/utils";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface OwnedProductProps {
   product: IProduct;
@@ -60,12 +71,12 @@ const OwnedProduct = ({ product }: OwnedProductProps) => {
       router.refresh();
       toast({
         title: "Operation success",
-        description: "Product removed successfully",
+        description: "Product discount updated",
       });
     } else {
       toast({
         title: "Operation failed",
-        description: "Product remove failed",
+        description: "Product discount updating failed",
       });
     }
 
@@ -74,8 +85,8 @@ const OwnedProduct = ({ product }: OwnedProductProps) => {
 
   return (
     <div className={`flex flex-col border-gray-300 border-b pb-5`}>
-      <div className="flex justify-between items-center">
-        <div className="flex gap-4 flex-[3]">
+      <div className="flex flex-col gap-4 sm:flex-row justify-between items-center">
+        <div className="flex flex-col sm:flex-row gap-4 flex-[3]">
           <Image
             src={product.imageUrl}
             alt={product.id}
@@ -94,7 +105,7 @@ const OwnedProduct = ({ product }: OwnedProductProps) => {
             </div>
             {product.discount > 0 && (
               <div className="flex items-center gap-1.5">
-                Price with Discount:{" "}
+                Price with Discount:
                 <span className="font-semibold text-own-light-red">
                   {getDiscountPrice(product.price, product.discount)}$
                 </span>
@@ -106,19 +117,21 @@ const OwnedProduct = ({ product }: OwnedProductProps) => {
           </div>
         </div>
 
-        <div className="flex gap-10 items-center">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-10 items-center">
+          <div className="flex flex-col gap-2 w-full md:w-auto">
             <Select
               onValueChange={handleDiscountChange}
               defaultValue={`${product.discount}`}
               disabled={isDisabled}
             >
-              <SelectTrigger className="w-[120px]">
+              <SelectTrigger className="w-full md:w-[120px]">
                 <SelectValue placeholder="Discount" />
               </SelectTrigger>
               <SelectContent>
                 {discountRate.map((rate) => (
-                  <SelectItem value={`${rate}`}>{rate}%</SelectItem>
+                  <SelectItem value={`${rate}`} key={rate}>
+                    {rate}%
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -137,13 +150,29 @@ const OwnedProduct = ({ product }: OwnedProductProps) => {
             >
               Edit Product
             </Button>
-            <Button
-              className="border border-red-500 hover:bg-transparent hover:text-red-500"
-              onClick={async () => await handleRemove()}
-              disabled={isDisabled}
-            >
-              Remove from cart
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger
+                className="border border-red-500 hover:bg-transparent hover:text-red-500 px-4 py-2 text-white rounded-md bg-red-500 transition-colors"
+                disabled={isDisabled}
+              >
+                Remove from cart
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => handleRemove()}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </div>

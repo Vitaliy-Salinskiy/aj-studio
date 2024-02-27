@@ -32,7 +32,6 @@ import { Input } from "@/components/ui/input";
 import { loginSchema, registerSchema } from "@/schemas";
 import { IUserForm } from "@/interfaces";
 import { userFormInitialValues } from "@/constants";
-import { redirect } from "next/navigation";
 
 interface CredentialsFormProps {
   isExtended: boolean;

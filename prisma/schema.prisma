@@ -113,9 +113,9 @@ enum Status {
 
 model Wishlist {
   id        String  @id @default(uuid())
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
 
   @@unique([userId, productId])

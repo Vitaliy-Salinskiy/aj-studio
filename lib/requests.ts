@@ -1,6 +1,8 @@
-import { OrderItemDto, ProductDto, UserDto } from "@/interfaces";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
+
+import { User as IUser } from "@prisma/client";
+import { OrderItemDto, ProductDto, UserDto } from "@/interfaces";
 
 export const getAllProducts = async () => {
   try {
@@ -35,10 +37,11 @@ export const deleteProduct = async (id: string) => {
   try {
     return await prisma.product.delete({
       where: {
-        id,
+        id: id,
       },
     });
   } catch (error) {
+    console.error("Error in deleteProduct:", error);
     throw error;
   }
 };
@@ -208,6 +211,36 @@ export const getOwnedProducts = async (id: string) => {
     return await prisma.product.findMany({
       where: {
         userId: id,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateUserImage = async (id: string, image: string) => {
+  try {
+    return await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        image,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateUser = async (id: string, dto: Partial<IUser>) => {
+  try {
+    return await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        ...dto,
       },
     });
   } catch (error) {

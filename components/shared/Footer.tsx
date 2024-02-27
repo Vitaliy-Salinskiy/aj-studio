@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { footerCopyrights, footerFeatures, socials } from "@/constants";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer>
       <div className="appContainer border-b-[2px] border-black">
@@ -52,7 +54,7 @@ const Footer = () => {
         <div className="appContainer">
           <div className="flex flex-col lg:flex-row lg:justify-between gap-8 pt-4 pb-10 lg:pt-8">
             <div className="flex flex-col lg:flex-row gap-6">
-              <h4>2023 Relume. All right reserved.</h4>
+              <h4>{currentYear} Relume. All right reserved.</h4>
               <ul className="flex gap-6">
                 {footerCopyrights.map((right, index) => (
                   <li key={index} className="underline cursor-pointer">

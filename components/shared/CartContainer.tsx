@@ -36,7 +36,7 @@ const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
       <div className="flex flex-col gap-5">
         {ordersItems.length > 0 ? (
           ordersItems
-            .reverse()
+            // .reverse() // bug here
             .map((item: any, index: number) => (
               <OrderItem orderItem={item} userId={userId} key={index + item} />
             ))
@@ -48,7 +48,7 @@ const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
       </div>
       {ordersItems.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h2 className="text-[29px] font-bold flex gap-2">
+          <h2 className="text-[26px] sm:text-[29px] font-bold flex gap-2">
             Total:{" "}
             {Number(totals.discount.toFixed()) !== totals.total ? (
               <span>

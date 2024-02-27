@@ -44,8 +44,12 @@ const Header = ({ productsCount, session }: HeaderProps) => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    onLanguageChange("ENG");
-    onCurrencyChange("USD");
+    const setQueries = async () => {
+      await onLanguageChange("ENG");
+      await onCurrencyChange("USD");
+    };
+
+    setQueries();
   }, []);
 
   const setQueryAndPush = (key: string, value: string | null) => {
@@ -65,15 +69,15 @@ const Header = ({ productsCount, session }: HeaderProps) => {
     router.push(`${pathName}${query}`);
   };
 
-  const onLanguageChange = (value: string) => {
+  const onLanguageChange = async (value: string) => {
     setQueryAndPush("lang", value);
   };
 
-  const onCurrencyChange = (value: string) => {
+  const onCurrencyChange = async (value: string) => {
     setQueryAndPush("currency", value);
   };
 
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setQueryAndPush("search", e.target.value || null);
   };
   return (
@@ -116,7 +120,7 @@ const Header = ({ productsCount, session }: HeaderProps) => {
             </Link>
           </div>
 
-          <div className="gap-[46px] hidden sm:flex">
+          <div className="gap-[46px] hidden sm:flex items-center">
             <div className="hidden gap-[30px] items-center sm:flex">
               {headerLinks.map((link) => {
                 if (!link.withAuth && session?.user) {
@@ -162,7 +166,10 @@ const Header = ({ productsCount, session }: HeaderProps) => {
                             My GitHub
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => signOut()}>
+                          <DropdownMenuItem
+                            onClick={() => signOut()}
+                            className="text-own-light-red hover:!text-own-light-red"
+                          >
                             Log out
                           </DropdownMenuItem>
                         </DropdownMenuContent>

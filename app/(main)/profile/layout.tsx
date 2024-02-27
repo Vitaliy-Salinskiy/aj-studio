@@ -33,7 +33,7 @@ export default async function RootLayout({
           </div>
 
           <div className="flex gap-4">
-            <div className="flex flex-col flex-1 border border-gray-300 h-fit">
+            <div className="hidden xl:flex flex-col flex-1 border border-gray-300 h-fit">
               <div className="flex gap-3 p-5 items-center border-gray-300 border-b">
                 <Avatar className="h-12 w-12">
                   <AvatarImage src={session?.user.image!} />

@@ -12,7 +12,7 @@ export const productSchema = z.object({
     .trim()
     .min(5, { message: "Description must be at least 5 characters" })
     .max(2500, { message: "Description must be no more than 2500 characters" })
-    .optional(),
+    .or(z.literal("")),
   price: z
     .string()
     .transform(parseFloat)
@@ -55,15 +55,18 @@ export const registerSchema = loginSchema
     path: ["confirmPassword"],
   });
 
-const phoneNumberSchema = z.string().refine(
-  (phoneNumber) => {
-    const phoneNumberObject = parsePhoneNumber(phoneNumber);
-    return phoneNumberObject ? phoneNumberObject.isValid() : false;
-  },
-  {
-    message: "Invalid phone number",
-  }
-);
+const phoneNumberSchema = z
+  .string()
+  .refine(
+    (phoneNumber) => {
+      const phoneNumberObject = parsePhoneNumber(phoneNumber);
+      return phoneNumberObject ? phoneNumberObject.isValid() : false;
+    },
+    {
+      message: "Invalid phone number",
+    }
+  )
+  .or(z.literal(""));
 
 const addressSchema = z
   .string()
@@ -76,7 +79,7 @@ const addressSchema = z
       message: "Address must contain a street, city, and country",
     }
   )
-  .optional();
+  .or(z.literal(""));
 
 export const profileSchema = z.object({
   name: z
@@ -87,10 +90,9 @@ export const profileSchema = z.object({
     .string()
     .min(25, { message: "Bio must be at least 25 characters" })
     .max(2500, { message: "Bio must be at most 2500 characters" })
-    .optional(),
+    .or(z.literal("")),
   profileImage: z.string().url(),
   address: addressSchema,
-  email: z.string().email(),
   dateOfBirth: z.date().optional(),
   phoneNumber: phoneNumberSchema,
 });

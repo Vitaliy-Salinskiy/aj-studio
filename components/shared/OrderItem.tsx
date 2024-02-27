@@ -38,7 +38,7 @@ const OrderItem = ({ orderItem }: OrderItemProps) => {
 
   return (
     <div className={`flex flex-col border-gray-300 border-b pb-5`}>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-3 sm:gap-0 sm:flex-row justify-between items-center">
         <div className="flex gap-2 flex-[3]">
           <Image
             src={orderItem.product.imageUrl}
@@ -60,35 +60,37 @@ const OrderItem = ({ orderItem }: OrderItemProps) => {
           </div>
         </div>
 
-        <h4 className="font-bold flex-1 flex gap-2">
-          {orderItem.product.discount > 0 && (
-            <span>
-              {getDiscountPrice(
-                orderItem.product.price,
-                orderItem.product.discount,
-                orderItem.quantity
-              )}
-              $
+        <div className="flex flex-col md:flex-row flex-1 gap-4 md:gap-16 items-center">
+          <h4 className="font-bold  flex gap-2">
+            {orderItem.product.discount > 0 && (
+              <span>
+                {getDiscountPrice(
+                  orderItem.product.price,
+                  orderItem.product.discount,
+                  orderItem.quantity
+                )}
+                $
+              </span>
+            )}
+            <span
+              className={`${
+                orderItem.product.discount
+                  ? "text-own-light-red line-through"
+                  : ""
+              }`}
+            >
+              {orderItem.product.price * orderItem.quantity}$
             </span>
-          )}
-          <span
-            className={`${
-              orderItem.product.discount
-                ? "text-own-light-red line-through"
-                : ""
-            }`}
-          >
-            {orderItem.product.price * orderItem.quantity}$
-          </span>
-        </h4>
+          </h4>
 
-        <div className="flex flex-col gap-2">
-          <Button
-            className="border border-red-500 hover:bg-transparent hover:text-red-500"
-            onClick={async () => await handleRemove()}
-          >
-            Remove from cart
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button
+              className="border border-red-500 hover:bg-transparent hover:text-red-500"
+              onClick={async () => await handleRemove()}
+            >
+              Remove from cart
+            </Button>
+          </div>
         </div>
       </div>
     </div>
