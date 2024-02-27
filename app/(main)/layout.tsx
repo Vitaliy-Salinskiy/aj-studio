@@ -18,7 +18,7 @@ export default async function RootLayout({
   const session = await getServerSession(options);
 
   const data = await fetch(
-    `http://localhost:3000/api/orders/item/${session?.user.id}/count`
+    `http://localhost:3000/api/cart/item/${session?.user.id}/count`
   );
   const productsCount = await data.json();
 

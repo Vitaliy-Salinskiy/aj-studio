@@ -74,23 +74,19 @@ export const options: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, trigger, user, session }) {
-      console.log(user, token);
       if (user) {
         return {
           ...token,
           id: user.id,
-          role: user.role,
           image: user.image,
         };
       }
       return token;
     },
     async session({ session, trigger, token }) {
-      console.log(session);
       if (token.image) {
         session.user.image = token.image;
       }
-      session.user.role = token.role;
       session.user.id = token.id;
       return session;
     },

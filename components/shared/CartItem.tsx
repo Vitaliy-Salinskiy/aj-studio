@@ -13,12 +13,12 @@ interface OrderItemProps {
   userId: string;
 }
 
-const OrderItem = ({ orderItem }: OrderItemProps) => {
+const CartItem = ({ orderItem }: OrderItemProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
   const handleRemove = async () => {
-    const res = await fetch(`/api/orders/item/${orderItem.id}`, {
+    const res = await fetch(`/api/cart/item/${orderItem.id}`, {
       method: "DELETE",
     });
 
@@ -97,4 +97,4 @@ const OrderItem = ({ orderItem }: OrderItemProps) => {
   );
 };
 
-export default OrderItem;
+export default CartItem;

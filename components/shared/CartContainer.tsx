@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import OrderItem from "@/components/shared/OrderItem";
+import OrderItem from "@/components/shared/CartItem";
 import { Button } from "@/components/ui/button";
 import { ExtendedOrderItem } from "@/interfaces";
 

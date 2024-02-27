@@ -48,7 +48,7 @@ const ProductController = ({ product }: ProductControllerProps) => {
       quantity,
     };
 
-    const res = await fetch(`/api/orders/item/${session?.user.id}`, {
+    const res = await fetch(`/api/cart/item/${session?.user.id}`, {
       method: "POST",
       body: JSON.stringify({ dto }),
     });
