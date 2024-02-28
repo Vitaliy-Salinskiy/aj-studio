@@ -1,7 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
-
 import { User as IUser } from "@prisma/client";
+import bcrypt from "bcrypt";
+import orderId from "order-id";
+
+import { prisma } from "@/lib/prisma";
 import { OrderItemDto, ProductDto, UserDto } from "@/interfaces";
 
 export const getAllProducts = async () => {
@@ -108,7 +109,6 @@ export const createOrderItem = async (dto: OrderItemDto, userId: string) => {
 
 export const getOrdersItemsByUserId = async (id: string) => {
   try {
-    console.log("id", id);
     const ordersItems = await prisma.orderItem.findMany({
       where: {
         userId: id,
@@ -130,6 +130,7 @@ export const countOrderItems = async (id: string) => {
     const count = await prisma.orderItem.count({
       where: {
         userId: id,
+        status: { not: "REMOVED" },
       },
     });
 
@@ -141,10 +142,13 @@ export const countOrderItems = async (id: string) => {
 
 export const createOrder = async (userId: string, orderItems: string[]) => {
   try {
+    const orderNumber = orderId("adapter").generate().split("-").join("");
+
     return await prisma.order.create({
       data: {
         userId,
-        orderItem: {
+        orderNumber,
+        orderItems: {
           connect: orderItems.map((id) => ({ id })),
         },
       },
@@ -156,9 +160,12 @@ export const createOrder = async (userId: string, orderItems: string[]) => {
 
 export const deleteProductFromCart = async (productId: string) => {
   try {
-    return await prisma.orderItem.delete({
+    return await prisma.orderItem.update({
       where: {
         id: productId,
+      },
+      data: {
+        status: "REMOVED",
       },
     });
   } catch (error) {
@@ -241,6 +248,41 @@ export const updateUser = async (id: string, dto: Partial<IUser>) => {
       },
       data: {
         ...dto,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const clearCart = async (id: string) => {
+  try {
+    return await prisma.orderItem.updateMany({
+      where: {
+        userId: id,
+      },
+      data: {
+        status: "REMOVED",
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllOrders = async (id: string) => {
+  try {
+    return await prisma.order.findMany({
+      where: {
+        userId: id,
+      },
+      include: {
+        user: true,
+        orderItems: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
   } catch (error) {

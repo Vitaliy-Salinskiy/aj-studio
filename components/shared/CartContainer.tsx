@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import OrderItem from "@/components/shared/CartItem";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { ExtendedOrderItem } from "@/interfaces";
 
 interface CartContainerProps {
@@ -13,6 +15,8 @@ interface CartContainerProps {
 
 const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
   const [totals, setTotals] = useState({ discount: 0, total: 0 });
+  const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     const newTotals = ordersItems.reduce(
@@ -30,6 +34,31 @@ const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
 
     setTotals(newTotals);
   }, [ordersItems]);
+
+  const handleOrderCreate = async () => {
+    const res = await fetch(`/api/orders/${userId}`, {
+      method: "POST",
+      body: JSON.stringify({
+        orderItems: ordersItems.map((item) => item.id),
+      }),
+    });
+
+    if (res.ok) {
+      toast({
+        title: "Order",
+        description: "Order created successfully",
+      });
+      router.refresh();
+      setTimeout(() => {
+        router.push("/profile/orders");
+      }, 2000);
+    } else {
+      toast({
+        title: "Order",
+        description: "Something went wrong... Please try again later",
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -61,7 +90,10 @@ const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
               `${totals.total}$`
             )}
           </h2>
-          <Button className="bg-black hover:bg-black transition-transform active:scale-95 duration-200">
+          <Button
+            className="bg-black hover:bg-black transition-transform active:scale-95 duration-200"
+            onClick={() => handleOrderCreate()}
+          >
             Make an order
           </Button>
         </div>

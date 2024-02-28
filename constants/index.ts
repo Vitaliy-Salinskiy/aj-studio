@@ -1,8 +1,15 @@
 import { CgProfile } from "react-icons/cg";
 import { BsFillBox2HeartFill } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
-import { IoSettings } from "react-icons/io5";
 import { MdSimCardDownload } from "react-icons/md";
+import { FaFacebook } from "react-icons/fa";
+import { AiFillTwitterCircle } from "react-icons/ai";
+import { RiInstagramFill } from "react-icons/ri";
+import { FaLinkedin } from "react-icons/fa";
+import { LuClipboardList } from "react-icons/lu";
+
+import { OrderStatus } from "@prisma/client";
+
 
 export const headerLinks = [
   {
@@ -100,6 +107,11 @@ export const profileTabs = [
     icons: FaShoppingCart,
   },
   {
+    label: "Orders",
+    path: "/profile/orders",
+    icons: LuClipboardList,
+  },
+  {
     label: "Wishlist",
     path: "/profile/wishlist",
     icons: BsFillBox2HeartFill,
@@ -108,11 +120,6 @@ export const profileTabs = [
     label: "Your Products",
     path: "/profile/products",
     icons: MdSimCardDownload,
-  },
-  {
-    label: "Settings",
-    path: "/profile/settings",
-    icons: IoSettings,
   },
 ];
 
@@ -148,11 +155,6 @@ export const footerFeatures = [
   },
 ];
 
-import { FaFacebook } from "react-icons/fa";
-import { AiFillTwitterCircle } from "react-icons/ai";
-import { RiInstagramFill } from "react-icons/ri";
-import { FaLinkedin } from "react-icons/fa";
-
 export const socials = [
   {
     name: "Facebook",
@@ -185,3 +187,10 @@ export const footerCopyrights = [
   "Terms of Service",
   "Cookies Settings",
 ];
+
+export const statusColors = {
+  [OrderStatus.PENDING]: "#E1AD01",
+  [OrderStatus.PROCESSING]: "#005B96",
+  [OrderStatus.COMPLETED]: "#00A21E",
+  [OrderStatus.CANCELLED]: "#FF6000",
+};

@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 
 import "./globals.css";
+
 import AuthProvider from "@/context/AuthProvider";
 import { EdgeStoreProvider } from "@/context/EdgeStoreProvider";
 

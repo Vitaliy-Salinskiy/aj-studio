@@ -17,7 +17,16 @@ const page = async () => {
   );
   const ordersItems: ExtendedOrderItem[] = await res.json();
 
-  return <CartContainer ordersItems={ordersItems} userId={session?.user.id!} />;
+  const filteredOrdersItems = ordersItems.filter(
+    (item) => item.status !== "REMOVED"
+  );
+
+  return (
+    <CartContainer
+      ordersItems={filteredOrdersItems}
+      userId={session?.user.id!}
+    />
+  );
 };
 
 export default page;
