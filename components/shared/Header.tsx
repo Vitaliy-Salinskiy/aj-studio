@@ -157,6 +157,12 @@ const Header = ({ productsCount, session }: HeaderProps) => {
                           </DropdownMenuGroup>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
+                            onClick={() => router.push("/about")}
+                          >
+                            About us
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
                             onClick={() =>
                               router.replace(
                                 "https://github.com/Vitaliy-Salinskiy"

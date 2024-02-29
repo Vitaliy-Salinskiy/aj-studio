@@ -22,9 +22,15 @@ const page = async () => {
   return (
     <section>
       <div className="flex flex-col gap-2">
-        {products.map((product: IProduct) => (
-          <OwnedProduct key={product.id} product={product} />
-        ))}
+        {products.length > 0 ? (
+          products.map((product: IProduct) => (
+            <OwnedProduct key={product.id} product={product} />
+          ))
+        ) : (
+          <p className="w-full text-3xl text-center min-h-80 flex items-center justify-center">
+            Products are empty
+          </p>
+        )}
       </div>
     </section>
   );

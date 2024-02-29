@@ -18,9 +18,13 @@ const page = async () => {
   return (
     <section>
       <div className="flex flex-col gap-4">
-        {orders && orders.length > 0
-          ? orders.map((order) => <Order key={order.id} order={order} />)
-          : "No orders"}
+        {orders && orders.length > 0 ? (
+          orders.map((order) => <Order key={order.id} order={order} />)
+        ) : (
+          <p className="text-3xl text-center min-h-80 flex items-center justify-center">
+            Orders are empty
+          </p>
+        )}
       </div>
     </section>
   );
