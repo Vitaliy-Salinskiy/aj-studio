@@ -2,9 +2,15 @@ import { createProduct, getAllProducts } from "@/lib/requests";
 import { revalidatePath } from "next/cache";
 
 export const GET = async () => {
-  const products = await getAllProducts();
+  try {
+    const products = await getAllProducts();
 
-  return new Response(JSON.stringify(products));
+    return new Response(JSON.stringify(products));
+  } catch (error) {
+    return new Response(JSON.stringify({ message: "Something went wrong" }), {
+      status: 500,
+    });
+  }
 };
 
 export const POST = async (request: Request) => {
@@ -12,12 +18,18 @@ export const POST = async (request: Request) => {
 
   if (!dto || !userId) return new Response("Invalid data", { status: 400 });
 
-  const newProduct = await createProduct(dto, userId);
+  try {
+    const newProduct = await createProduct(dto, userId);
 
-  if (!newProduct)
-    return new Response("Failed to create product", { status: 500 });
+    if (!newProduct)
+      return new Response("Failed to create product", { status: 500 });
 
-  revalidatePath("/(main)/", "layout");
+    revalidatePath("/(main)/", "layout");
 
-  return new Response(JSON.stringify(newProduct));
+    return new Response(JSON.stringify(newProduct));
+  } catch (error) {
+    return new Response(JSON.stringify({ message: "Something went wrong" }), {
+      status: 500,
+    });
+  }
 };

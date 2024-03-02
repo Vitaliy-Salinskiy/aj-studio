@@ -7,7 +7,11 @@ import { OrderItemDto, ProductDto, UserDto } from "@/interfaces";
 
 export const getAllProducts = async () => {
   try {
-    return await prisma.product.findMany();
+    return await prisma.product.findMany({
+      include: {
+        User: true,
+      },
+    });
   } catch (error) {
     throw error;
   }

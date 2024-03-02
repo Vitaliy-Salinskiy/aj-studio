@@ -31,13 +31,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { IFilter } from "@/interfaces";
 
 interface AdminTableProps {
   data: any[];
   columns: ColumnDef<any>[];
+  filter?: IFilter;
 }
 
-export function AdminTable({ data, columns }: AdminTableProps) {
+export function AdminTable({ data, columns, filter }: AdminTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -69,10 +71,16 @@ export function AdminTable({ data, columns }: AdminTableProps) {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder={filter ? filter.placeholder : "Filter emails..."}
+          value={
+            (table
+              .getColumn(filter ? filter.field : "email")
+              ?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table
+              .getColumn(filter ? filter.field : "email")
+              ?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

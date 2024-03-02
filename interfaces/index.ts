@@ -50,9 +50,31 @@ export interface ExtendedOrder extends Order {
   orderItems: ExtendedOrderItem[];
 }
 
+export interface ExtendedProduct extends Product {
+  User: User;
+}
+
 export type AdminOrder = {
   id: string;
   status: OrderStatus;
   email: string;
   price: number;
 };
+
+export type AdminUser = {
+  id: string;
+  email: string;
+  role: string;
+};
+
+export type AdminProduct = {
+  id: string;
+  name: string;
+  email: string;
+  price: number;
+};
+
+export interface IFilter {
+  placeholder: string;
+  field: string;
+}

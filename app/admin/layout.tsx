@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { Doughnut } from "react-chartjs-2";
 import Sidebar from "@/components/shared/Sidebar";
-import ChartsContainer from "@/components/shared/ChartsContainer";
 
 export const metadata: Metadata = {
   title: "Studio | Admin Page",
@@ -28,8 +26,6 @@ export default async function layout({
 
   const salesData = await fetch("http://localhost:3000/api/products/sales");
   const sales = await salesData.json();
-
-  console.log("users", session?.user);
 
   return (
     <div className="flex">
