@@ -39,7 +39,7 @@ const page = async () => {
           />
         ))
       ) : (
-        <p className="w-full text-3xl text-center min-h-80 flex items-center justify-center">
+        <p className="text-3xl text-center min-h-80 flex items-center justify-center">
           No items in wishlist
         </p>
       )}

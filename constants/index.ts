@@ -7,9 +7,11 @@ import { AiFillTwitterCircle } from "react-icons/ai";
 import { RiInstagramFill } from "react-icons/ri";
 import { FaLinkedin } from "react-icons/fa";
 import { LuClipboardList } from "react-icons/lu";
+import { FaUsers } from "react-icons/fa6";
+import { FaBox } from "react-icons/fa";
+import { IoIosExit } from "react-icons/io";
 
 import { OrderStatus } from "@prisma/client";
-
 
 export const headerLinks = [
   {
@@ -194,3 +196,27 @@ export const statusColors = {
   [OrderStatus.COMPLETED]: "#00A21E",
   [OrderStatus.CANCELLED]: "#FF6000",
 };
+
+export const adminTabs = [
+  {
+    label: "Users",
+    path: "/admin",
+    icon: FaUsers,
+  },
+  {
+    label: "Products",
+    path: "/admin/products",
+    icon: FaBox,
+  },
+  {
+    label: "Orders",
+    path: "/admin/orders",
+    icon: LuClipboardList,
+  },
+  {
+    label: "Exit",
+    path: "/",
+    icon: IoIosExit,
+    isExit: true,
+  },
+];

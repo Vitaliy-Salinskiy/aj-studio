@@ -25,6 +25,7 @@ const config = {
         "own-gray": "#E7E9EB",
         "own-light-gray": "#666666",
         "own-dark-black": "#000",
+        "own-light-black": "#161A23",
         "own-dark-gray": "#677585",
         "own-dark-blue": "#11293B",
         "own-red": "#F67280",

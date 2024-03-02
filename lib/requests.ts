@@ -1,4 +1,4 @@
-import { User as IUser } from "@prisma/client";
+import { User as IUser, OrderStatus } from "@prisma/client";
 import bcrypt from "bcrypt";
 import orderId from "order-id";
 
@@ -16,6 +16,16 @@ export const getAllProducts = async () => {
 export const getProductsCount = async () => {
   try {
     return await prisma.product.count();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductsSales = async () => {
+  try {
+    const products = await prisma.product.findMany();
+
+    return products.reduce((acc, curr) => acc + curr.sales, 0);
   } catch (error) {
     throw error;
   }
@@ -71,6 +81,14 @@ export const updateProduct = async (id: string, dto: Partial<ProductDto>) => {
     });
   } catch (error) {
     return error;
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    return await prisma.user.findMany();
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -270,7 +288,24 @@ export const clearCart = async (id: string) => {
   }
 };
 
-export const getAllOrders = async (id: string) => {
+export const getAllOrders = async () => {
+  try {
+    return await prisma.order.findMany({
+      include: {
+        user: true,
+        orderItems: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllOrdersByUserId = async (id: string) => {
   try {
     return await prisma.order.findMany({
       where: {
@@ -282,6 +317,23 @@ export const getAllOrders = async (id: string) => {
           include: {
             product: true,
           },
+        },
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateOrder = async (id: string, status: OrderStatus) => {
+  try {
+    return await prisma.order.update({
+      where: {
+        id,
+      },
+      data: {
+        status: {
+          push: status,
         },
       },
     });
