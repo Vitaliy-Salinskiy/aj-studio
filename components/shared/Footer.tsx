@@ -1,8 +1,7 @@
 import Image from "next/image";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { footerCopyrights, footerFeatures, socials } from "@/constants";
+import FooterForm from "@/components/shared/FooterForm";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -33,16 +32,7 @@ const Footer = () => {
                 Join our newsletter to stay up to date on features and releases.
               </p>
             </div>
-            <form className="flex flex-col gap-4 mt-6">
-              <Input
-                className="p-3 border-[2px] border-black rounded-[5px] font-semibold placeholder:font-normal focus-visible:ring-0 focus-visible:ring-transparent"
-                type="email"
-                placeholder="Enter your email"
-              />
-              <div>
-                <Button type="button">Subscribe</Button>
-              </div>
-            </form>
+            <FooterForm />
             <p className="mt-6">
               By subscribing you agree to with our Privacy Policy and provide
               consent to receive updates from our company.

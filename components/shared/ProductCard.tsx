@@ -59,6 +59,7 @@ const ProductCard = async ({
               if (i === 0) {
                 return (
                   <div
+                    key={i}
                     className={`uppercase w-[59px] h-[31px]  ${
                       tag === "NEW" ? "bg-[#E76300]" : "bg-[#0077FF]"
                     } text-white text-center flex justify-start pl-4 items-center rounded-ee-[40px] z-[2]`}
@@ -71,6 +72,7 @@ const ProductCard = async ({
               if (i === 1) {
                 return (
                   <div
+                    key={i}
                     className={`uppercase w-[74px] h-[31px] ${
                       tag === "HOT" ? "bg-[#0077FF]" : "bg-[#E76300]"
                     } text-white text-center flex justify-end pr-5 items-center rounded-ee-[26px] z-[1] -translate-x-[27px]`}

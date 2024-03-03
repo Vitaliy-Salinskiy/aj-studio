@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { AdminProduct } from "@/interfaces";
+import Link from "next/link";
 
 export const ProductColumn: ColumnDef<AdminProduct>[] = [
   {
@@ -83,7 +84,6 @@ export const ProductColumn: ColumnDef<AdminProduct>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const router = useRouter();
       const product = row.original;
 
       return (
@@ -101,10 +101,8 @@ export const ProductColumn: ColumnDef<AdminProduct>[] = [
             >
               Copy ID
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => router.push(`/products/${product.id}`)}
-            >
-              View details
+            <DropdownMenuItem>
+              <Link href={`/products/${product.id}`}>View details</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </DropdownMenuContent>

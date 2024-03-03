@@ -1,11 +1,8 @@
 import { revalidatePath } from "next/cache";
 
 import { OrderItemDto } from "@/interfaces";
-import {
-  createOrderItem,
-  deleteProductFromCart,
-  getOrdersItemsByUserId,
-} from "@/lib/requests";
+import { createOrderItem, getOrdersItemsByUserId } from "@/lib/requests";
+import { OrderItem } from "@prisma/client";
 
 export const POST = async (
   request: Request,
@@ -39,7 +36,7 @@ export const POST = async (
 export const GET = async (
   _request: Request,
   { params }: { params: { id: string } }
-) => {
+): Promise<Response> => {
   try {
     const { id } = params;
 
@@ -53,6 +50,8 @@ export const GET = async (
 
     return new Response(JSON.stringify(ordersItems), { status: 200 });
   } catch (error) {
-    return error;
+    return new Response(JSON.stringify({ message: "Something went wrong" }), {
+      status: 500,
+    });
   }
 };

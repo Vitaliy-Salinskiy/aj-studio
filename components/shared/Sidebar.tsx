@@ -24,7 +24,7 @@ const Sidebar = ({ session }: SidebarProps) => {
 
   return (
     <aside
-      className={`bg-own-light-black text-white/50 min-h-screen p-6 min-w-fit rounded-r-[6px] flex flex-col`}
+      className={`bg-own-light-black text-white/50 w-full lg:w-auto lg:min-h-screen p-6 min-w-fit lg:rounded-r-[6px] flex lg:flex-col justify-between lg:justify-stretch`}
     >
       <div className="relative">
         <div
@@ -52,10 +52,10 @@ const Sidebar = ({ session }: SidebarProps) => {
           </div>
         </div>
       </div>
-      <Separator className="my-4 lg:my-6 bg-[#2D2F39] h-0.5" />
-      <div className="flex gap-2 flex-col h-full">
-        {adminTabs.map((item) => (
-          <TooltipProvider delayDuration={200}>
+      <Separator className="my-4 lg:my-6 bg-[#2D2F39] h-0.5 hidden lg:block" />
+      <div className="flex gap-2 lg:flex-col h-full">
+        {adminTabs.map((item, index) => (
+          <TooltipProvider delayDuration={200} key={index}>
             <Tooltip>
               <TooltipTrigger
                 className={`z-10 ${item.isExit ? "mt-auto" : ""}`}

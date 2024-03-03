@@ -2,7 +2,6 @@
 
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -120,7 +119,6 @@ export const OrderColumn: ColumnDef<AdminOrder>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const router = useRouter();
       const order = row.original;
 
       return (
@@ -139,11 +137,6 @@ export const OrderColumn: ColumnDef<AdminOrder>[] = [
               Copy order ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => router.push(`/orders/${order.id}`)}
-            >
-              View order details
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
