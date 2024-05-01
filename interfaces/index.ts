@@ -78,3 +78,20 @@ export interface IFilter {
   placeholder: string;
   field: string;
 }
+
+export interface IStripeItem {
+  price_data: {
+    currency: string;
+    product_data: {
+      name: string;
+      images: string[];
+    };
+    unit_amount: number;
+  };
+  quantity: number;
+}
+
+export interface IStripeMetaData {
+  userId: string;
+  itemsId: string[];
+}

@@ -6,7 +6,13 @@ import { useRouter } from "next/navigation";
 import OrderItem from "@/components/shared/CartItem";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { ExtendedOrderItem } from "@/interfaces";
+import { ExtendedOrderItem, IStripeItem, IStripeMetaData } from "@/interfaces";
+
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
+);
 
 interface CartContainerProps {
   ordersItems: ExtendedOrderItem[];
@@ -36,22 +42,50 @@ const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
   }, [ordersItems]);
 
   const handleOrderCreate = async () => {
+    const stipeItems: IStripeItem[] = ordersItems.map(
+      (item: ExtendedOrderItem) => {
+        return {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: item.product.name,
+              images: [item.product.imageUrl],
+            },
+            unit_amount: item.product.price * 100,
+          },
+          quantity: item.quantity,
+        };
+      }
+    );
+
+    const metadata: IStripeMetaData = {
+      userId,
+      itemsId: ordersItems.map((item: ExtendedOrderItem) => item.id),
+    };
+
     const res = await fetch(`/api/orders/${userId}`, {
       method: "POST",
       body: JSON.stringify({
-        orderItems: ordersItems.map((item) => item.id),
+        orderItems: stipeItems,
+        metadata,
       }),
     });
 
     if (res.ok) {
-      toast({
-        title: "Order",
-        description: "Order created successfully",
+      const stripe = await stripePromise;
+
+      const { sessionId } = await res.json();
+
+      const result = await stripe?.redirectToCheckout({
+        sessionId,
       });
-      router.refresh();
-      setTimeout(() => {
-        router.push("/profile/orders");
-      }, 2000);
+
+      if (result?.error) {
+        toast({
+          title: "Order",
+          description: "Something went wrong... Please try again later",
+        });
+      }
     } else {
       toast({
         title: "Order",

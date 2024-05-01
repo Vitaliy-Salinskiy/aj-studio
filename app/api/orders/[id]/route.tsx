@@ -1,15 +1,14 @@
+import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
-import {
-  clearCart,
-  createOrder,
-  getAllOrdersByUserId,
-  updateOrder,
-} from "@/lib/requests";
+import Stripe from "stripe";
+
+import { clearCart, getAllOrdersByUserId, updateOrder } from "@/lib/requests";
 import { OrderStatus } from "@prisma/client";
+import { IStripeItem, IStripeMetaData } from "@/interfaces";
 
 export const GET = async (
-  _request: Request,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   const { id } = params;
@@ -32,13 +31,14 @@ export const GET = async (
 };
 
 export const POST = async (
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   const { id } = params;
 
-  const body: { orderItems: string[] } = await request.json();
-  const { orderItems } = body;
+  const body: { orderItems: IStripeItem[]; metadata: IStripeMetaData } =
+    await request.json();
+  const { orderItems, metadata } = body;
 
   if (!orderItems || !id) {
     return new Response(JSON.stringify({ message: "Invalid request" }), {
@@ -46,28 +46,37 @@ export const POST = async (
     });
   }
 
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY as string;
+
+  const stripe = new Stripe(stripeSecretKey, {
+    apiVersion: "2024-04-10",
+    typescript: true,
+  });
+
   try {
-    const order = await createOrder(id, orderItems);
+    const session = await stripe.checkout.sessions.create({
+      line_items: [...orderItems],
+      metadata: {
+        userId: metadata.userId,
+        itemsId: JSON.stringify(metadata.itemsId),
+      },
+      mode: "payment",
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/profile/cart`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/profile/cart`,
+    });
 
-    revalidatePath("/(main)/profile/orders");
-    revalidatePath("/(main)/profile/cart");
-    revalidatePath("/(main)/orders/[id]");
-
-    if (order) {
-      await clearCart(id);
-    }
-
-    return new Response(JSON.stringify({ order }));
+    return NextResponse.json({ sessionId: session.id }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ message: "Something went wrong" }), {
-      status: 500,
-    });
+    return NextResponse.json(
+      { message: "Something went wrong" },
+      { status: 500 }
+    );
   }
 };
 
 export const PUT = async (
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   const { id } = params;
