@@ -18,8 +18,8 @@ const CartItem = ({ orderItem }: OrderItemProps) => {
   const router = useRouter();
 
   const handleRemove = async () => {
-    const res = await fetch(`/api/cart/item/${orderItem.id}`, {
-      method: "DELETE",
+    const res = await fetch(`/api/cart/clear/${orderItem.id}`, {
+      method: "POST",
     });
 
     if (res.ok) {

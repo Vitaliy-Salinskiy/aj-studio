@@ -147,12 +147,24 @@ export const getOrdersItemsByUserId = async (id: string) => {
   }
 };
 
+export const deleteItemFromCart = async (id: string) => {
+  try {
+    return await prisma.orderItem.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const countOrderItems = async (id: string) => {
   try {
     const count = await prisma.orderItem.count({
       where: {
         userId: id,
-        status: { not: "REMOVED" },
+        status: { equals: null },
       },
     });
 

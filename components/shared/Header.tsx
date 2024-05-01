@@ -31,7 +31,7 @@ import {
   profileTabs,
 } from "@/constants";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 interface HeaderProps {
   productsCount: number;
@@ -43,6 +43,44 @@ const Header = ({ productsCount, session }: HeaderProps) => {
   const pathName = usePathname();
   const searchParams = useSearchParams();
 
+  const setQueryAndPush = useCallback(
+    (key: string, value: string | null) => {
+      const currentQuery = new URLSearchParams(
+        Array.from(searchParams.entries())
+      );
+
+      if (value) {
+        currentQuery.set(key, value);
+      } else {
+        currentQuery.delete(key);
+      }
+
+      const newQuery = currentQuery.toString();
+      const query = newQuery ? `?${newQuery}` : "";
+
+      router.push(`${pathName}${query}`);
+    },
+    [searchParams, pathName, router]
+  );
+
+  const onLanguageChange = useCallback(
+    async (value: string) => {
+      setQueryAndPush("lang", value);
+    },
+    [setQueryAndPush]
+  );
+
+  const onCurrencyChange = useCallback(
+    async (value: string) => {
+      setQueryAndPush("currency", value);
+    },
+    [setQueryAndPush]
+  );
+
+  const onInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQueryAndPush("search", e.target.value || null);
+  };
+
   useEffect(() => {
     const setQueries = async () => {
       await onLanguageChange("ENG");
@@ -50,36 +88,8 @@ const Header = ({ productsCount, session }: HeaderProps) => {
     };
 
     setQueries();
-  }, []);
+  }, [onLanguageChange, onCurrencyChange]);
 
-  const setQueryAndPush = (key: string, value: string | null) => {
-    const currentQuery = new URLSearchParams(
-      Array.from(searchParams.entries())
-    );
-
-    if (value) {
-      currentQuery.set(key, value);
-    } else {
-      currentQuery.delete(key);
-    }
-
-    const newQuery = currentQuery.toString();
-    const query = newQuery ? `?${newQuery}` : "";
-
-    router.push(`${pathName}${query}`);
-  };
-
-  const onLanguageChange = async (value: string) => {
-    setQueryAndPush("lang", value);
-  };
-
-  const onCurrencyChange = async (value: string) => {
-    setQueryAndPush("currency", value);
-  };
-
-  const onInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQueryAndPush("search", e.target.value || null);
-  };
   return (
     <header>
       <div className="appContainer">

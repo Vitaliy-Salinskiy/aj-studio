@@ -1,6 +1,7 @@
 "use client";
 
 import { UploadCloudIcon, X } from "lucide-react";
+import Image from "next/image";
 import * as React from "react";
 import { useDropzone, type DropzoneOptions } from "react-dropzone";
 import { twMerge } from "tailwind-merge";
@@ -122,18 +123,18 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
             className: dropZoneClassName,
           })}
         >
-          {/* Main File Input */}
           <input ref={ref} {...getInputProps()} />
 
           {imageUrl ? (
-            // Image Preview
-            <img
-              className="h-[75%] w-[75%] rounded-md object-cover"
-              src={imageUrl}
-              alt={acceptedFiles[0]?.name}
-            />
+            <div className="relative h-[75%] w-[75%] rounded-md overflow-hidden">
+              <Image
+                fill
+                className="object-cover"
+                src={imageUrl}
+                alt={acceptedFiles[0]?.name}
+              />
+            </div>
           ) : (
-            // Upload Icon
             <div className="flex flex-col items-center justify-center text-xs text-gray-400">
               <UploadCloudIcon className="mb-2 h-10 w-10 text-black" />
               <div className="text-own-light-red font-medium text-sm">
@@ -150,7 +151,6 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
             </div>
           )}
 
-          {/* Remove Image Icon */}
           {imageUrl && !disabled && (
             <div
               className="group absolute right-0 top-0 -translate-y-1/4 translate-x-1/4 transform"
@@ -185,11 +185,8 @@ const Button = React.forwardRef<
   return (
     <button
       className={twMerge(
-        // base
         "focus-visible:ring-ring inline-flex cursor-pointer items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50",
-        // color
         "border border-gray-400 text-gray-400 shadow hover:bg-gray-100 hover:text-gray-500 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-700",
-        // size
         "h-6 rounded-md px-2 text-xs",
         className
       )}

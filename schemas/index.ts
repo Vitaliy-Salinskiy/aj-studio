@@ -94,5 +94,6 @@ export const profileSchema = z.object({
   profileImage: z.string().url(),
   address: addressSchema,
   dateOfBirth: z.date().optional(),
-  phoneNumber: phoneNumberSchema,
+  image: z.string().url().optional(),
+  phoneNumber: phoneNumberSchema.optional(),
 });

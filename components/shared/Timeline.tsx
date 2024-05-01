@@ -7,8 +7,6 @@ import {
 
 import { FaHourglassStart } from "react-icons/fa6";
 
-// import { ShoesCanvas } from "@/components/shared/ShoesCanvas";
-
 import "react-vertical-timeline-component/style.min.css";
 
 const Timeline = () => {
@@ -59,7 +57,6 @@ const Timeline = () => {
           Creative Direction, User Experience, Visual Design, SEO, Online
           Marketing
         </p>
-        {/* <ShoesCanvas/> */}
       </VerticalTimelineElement>
       <VerticalTimelineElement
         visible

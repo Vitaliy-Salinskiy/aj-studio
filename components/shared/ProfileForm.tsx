@@ -40,9 +40,10 @@ interface ProfileFormProps {
 
 const ProfileForm = ({ profileData }: ProfileFormProps) => {
   const { data: session, update: updateSession } = useSession();
-  const router = useRouter();
-  const [file, setFile] = useState<string>("");
   const { edgestore } = useEdgeStore();
+
+  const router = useRouter();
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
@@ -50,31 +51,33 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
   });
 
   useEffect(() => {
-    profileForm.reset({
-      name: profileData?.name! || "",
-      dateOfBirth: profileData?.dateOfBirth || undefined,
-      bio: profileData?.bio || "",
-      address: profileData?.address || "",
-      phoneNumber: profileData?.phoneNumber || "",
-    });
-  }, [profileData?.id]);
+    const { name, dateOfBirth, bio, address, phoneNumber, image } =
+      profileData || {};
 
-  useEffect(() => {
-    if (profileData?.image) {
-      setFile(profileData.image);
-    }
-  }, []);
+    profileForm.reset({
+      name: name || "",
+      dateOfBirth: dateOfBirth || undefined,
+      bio: bio || "",
+      address: address || "",
+      phoneNumber: phoneNumber || "",
+      image: image || "",
+    });
+  }, [profileData, profileForm]);
 
   const handlePictureChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const res = await edgestore.publicFiles.upload({
         file: e.target.files[0],
         onProgressChange: (progress) => {
-          console.log(progress);
+          if (progress !== 100 && !isDisabled) {
+            setIsDisabled(true);
+          } else {
+            setIsDisabled(false);
+          }
         },
       });
 
-      setFile(res.url);
+      profileForm.setValue("image", res.url);
 
       const userRes = await fetch(`/api/users/${profileData.id}`, {
         method: "PATCH",
@@ -82,12 +85,11 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
       });
 
       if (userRes.ok) {
-        router.refresh();
-        const sessionRes = await updateSession({
+        await updateSession({
           ...session,
           user: { ...session?.user, image: res.url },
         });
-        console.log("User image updated", sessionRes);
+        router.refresh();
       }
     }
   };
@@ -104,7 +106,10 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
       >
         <div className="flex justify-between items-center">
           <Avatar className="h-[72px] w-[72px] rounded-full bg-black text-white relative flex justify-center items-center text-2xl">
-            <AvatarImage src={file} className="w-full h-full rounded-full" />
+            <AvatarImage
+              src={profileForm.getValues("image")}
+              className="w-full h-full rounded-full"
+            />
             <label className="z-10 bg-transparent absolute inset-0 rounded-full cursor-pointer">
               <input
                 type="file"
@@ -119,10 +124,14 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
             <AvatarFallback>{profileData?.name?.slice(0, 1)}</AvatarFallback>
           </Avatar>
 
-          {/* <Button className="bg-black hover:bg-black py-6 px-5 flex gap-2 transition-transform active:scale-90">
+          <Button
+            type="submit"
+            disabled={isDisabled}
+            className="bg-black hover:bg-black py-6 px-5 flex gap-2 transition-transform active:scale-90"
+          >
             <BiSolidMessageSquareEdit className="text-[17px]" />
             Edit Profile
-          </Button> */}
+          </Button>
         </div>
         <div className="flex flex-col md:flex-row gap-4 md:gap-3">
           <FormField
@@ -130,7 +139,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
             name="name"
             render={({ field }) => (
               <FormItem className="w-full flex flex-col gap-1 h-fit">
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Name </FormLabel>
                 <FormControl>
                   <Input
                     {...field}

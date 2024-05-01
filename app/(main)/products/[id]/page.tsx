@@ -6,7 +6,9 @@ import ProductController from "@/components/shared/ProductController";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const { id } = params;
-  const data = await fetch(`http://localhost:3000/api/products/${id}`);
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`
+  );
   const product: IProduct = await data.json();
 
   if (!product.id) {
@@ -18,7 +20,10 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 
 const page = async (url: any) => {
   const { id } = url.params;
-  const data = await fetch(`http://localhost:3000/api/products/${id}`);
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`
+  );
+
   const product: IProduct = await data.json();
 
   if (!product.id) {

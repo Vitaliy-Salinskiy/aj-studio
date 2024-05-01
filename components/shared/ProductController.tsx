@@ -29,7 +29,7 @@ const ProductController = ({ product }: ProductControllerProps) => {
     setDiscountPrice(
       getDiscountPrice(product.price, product.discount, quantity)
     );
-  }, [quantity]);
+  }, [quantity, product.discount, product.price]);
 
   const handleQuantity = (type: "inc" | "dec") => {
     if (type === "inc") {

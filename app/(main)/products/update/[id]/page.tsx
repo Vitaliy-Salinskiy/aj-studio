@@ -12,7 +12,7 @@ const page = async (url: any) => {
   const { id } = url.params;
   const session = await getServerSession();
 
-  const data = await fetch(`http://localhost:3000/api/products/${id}`);
+  const data = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`);
 
   const product = await data.json();
 

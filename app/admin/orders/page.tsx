@@ -5,7 +5,9 @@ import { ExtendedOrder } from "@/interfaces";
 import { getDiscountPrice } from "@/utils";
 
 const Page = async () => {
-  const ordersData = await fetch("http://localhost:3000/api/orders");
+  const ordersData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/orders`
+  );
   const orders = await ordersData.json();
 
   const data = orders.map((order: ExtendedOrder) => {

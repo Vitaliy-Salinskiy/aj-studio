@@ -17,16 +17,24 @@ export default async function layout({
 }>) {
   const session = await getServerSession(options);
 
-  const usersData = await fetch("http://localhost:3000/api/users");
+  const usersData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users`
+  );
   const users: User[] = await usersData.json();
 
-  const productData = await fetch("http://localhost:3000/api/products");
+  const productData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`
+  );
   const product: Product[] = await productData.json();
 
-  const ordersData = await fetch("http://localhost:3000/api/orders");
+  const ordersData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/orders`
+  );
   const orders: Order[] = await ordersData.json();
 
-  const salesData = await fetch("http://localhost:3000/api/products/sales");
+  const salesData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/sales`
+  );
   const sales = await salesData.json();
 
   const data = [

@@ -14,7 +14,7 @@ const page = async () => {
   const session = await getServerSession(options);
 
   const data = await fetch(
-    `http://localhost:3000/api/users/${session?.user.id}/products`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${session?.user.id}/products`
   );
 
   const products: IProduct[] = await data.json();

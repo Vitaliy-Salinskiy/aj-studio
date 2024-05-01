@@ -76,13 +76,13 @@ const ProductForm = ({ product }: ProductFormProps) => {
         });
       }
     }
-  }, [status]);
+  }, [status, router, session, product, toast]);
 
   useEffect(() => {
     if (product?.imageUrl) {
       setFile(product.imageUrl);
     }
-  }, [image]);
+  }, [image, product?.imageUrl]);
 
   const onSubmit = async (data: z.infer<typeof productSchema>) => {
     if (!session?.user?.id) {

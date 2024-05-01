@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import { options } from "@/app/api/auth/[...nextauth]/options";
+
 import ProfileForm from "@/components/shared/ProfileForm";
 
 const page = async () => {
@@ -12,7 +13,7 @@ const page = async () => {
   }
 
   const userData = await fetch(
-    `http://localhost:3000/api/users/${session?.user.id}`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${session?.user.id}`
   );
 
   const user = await userData.json();

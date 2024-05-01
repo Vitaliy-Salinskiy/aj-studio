@@ -4,9 +4,12 @@ import { ProductColumn } from "@/components/shared/Tables/product/ProductColumn"
 import { ExtendedProduct } from "@/interfaces";
 
 const Page = async () => {
-  const ordersData = await fetch("http://localhost:3000/api/products", {
-    cache: "no-cache",
-  });
+  const ordersData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`,
+    {
+      cache: "no-cache",
+    }
+  );
   const orders = await ordersData.json();
 
   const data = orders.map((product: ExtendedProduct) => {

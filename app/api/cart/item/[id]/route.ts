@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { OrderItemDto } from "@/interfaces";
 import { createOrderItem, getOrdersItemsByUserId } from "@/lib/requests";
 import { OrderItem } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 export const POST = async (
   request: Request,
@@ -22,7 +23,7 @@ export const POST = async (
   try {
     const res = await createOrderItem(dto, id);
 
-    revalidatePath("/(main)/");
+    revalidatePath("/(main)/", "layout");
     revalidatePath("/(main)/profile/cart");
 
     return new Response(JSON.stringify({ orderItem: res }), { status: 200 });

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const page = async () => {
   const session = await getServerSession(options);
   const res = await fetch(
-    `http://localhost:3000/api/cart/item/${session?.user.id}`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/cart/item/${session?.user.id}`
   );
   const ordersItems: ExtendedOrderItem[] = await res.json();
 

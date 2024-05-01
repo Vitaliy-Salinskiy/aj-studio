@@ -4,7 +4,9 @@ import { AdminTable } from "@/components/shared/Tables/AdminTable";
 import { UserColumn } from "@/components/shared/Tables/user/UserColumn";
 
 const Page = async () => {
-  const usersData = await fetch("http://localhost:3000/api/users");
+  const usersData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users`
+  );
   const users = await usersData.json();
 
   const data = users.map((user: User) => {

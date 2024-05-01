@@ -9,9 +9,7 @@ import { Product as IProduct } from "@prisma/client";
 import { cardColors } from "@/constants";
 
 export default async function Home(url: any) {
-  const data = await fetch("http://localhost:3000/api/products", {
-    cache: "no-cache",
-  });
+  const data = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`);
 
   const session = await getServerSession();
   const products: IProduct[] = await data.json();

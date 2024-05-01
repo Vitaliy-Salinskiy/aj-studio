@@ -15,9 +15,11 @@ export const metadata: Metadata = {
 const page = async () => {
   const session = await getServerSession(options);
 
-  const productsData = await fetch("http://localhost:3000/api/products");
+  const productsData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`
+  );
   const wishlistData = await fetch(
-    `http:/localhost:3000/api/wishlist/${session?.user.id}`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/wishlist/${session?.user.id}`
   );
 
   const products: IProduct[] = await productsData.json();
@@ -39,7 +41,7 @@ const page = async () => {
           />
         ))
       ) : (
-        <p className="text-3xl text-center min-h-80 flex items-center justify-center">
+        <p className="text-3xl text-center min-h-80 mx-auto flex items-center justify-center">
           No items in wishlist
         </p>
       )}
