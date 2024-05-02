@@ -282,6 +282,7 @@ export const updateUser = async (id: string, dto: Partial<IUser>) => {
       },
       data: {
         ...dto,
+        dateOfBirth: dto.dateOfBirth ? dto.dateOfBirth : null,
       },
     });
   } catch (error) {

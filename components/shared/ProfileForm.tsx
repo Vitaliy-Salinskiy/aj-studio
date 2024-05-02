@@ -1,13 +1,14 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
+import { useEdgeStore } from "@/context/EdgeStoreProvider";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { User as IUser } from "@prisma/client";
 
+import { Calendar as CalendarIcon } from "lucide-react";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -29,10 +30,13 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+
+import { IProfileForm } from "@/interfaces";
+
+import { User as IUser } from "@prisma/client";
 import { profileSchema } from "@/schemas";
-import { useEdgeStore } from "@/context/EdgeStoreProvider";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+
+import { useToast } from "../ui/use-toast";
 
 interface ProfileFormProps {
   profileData: IUser;
@@ -41,11 +45,13 @@ interface ProfileFormProps {
 const ProfileForm = ({ profileData }: ProfileFormProps) => {
   const { data: session, update: updateSession } = useSession();
   const { edgestore } = useEdgeStore();
+  const { toast } = useToast();
 
   const router = useRouter();
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const profileForm = useForm<z.infer<typeof profileSchema>>({
+  const profileForm = useForm<IProfileForm>({
     resolver: zodResolver(profileSchema),
     mode: "onChange",
   });
@@ -56,7 +62,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
 
     profileForm.reset({
       name: name || "",
-      dateOfBirth: dateOfBirth || undefined,
+      dateOfBirth: dateOfBirth ? new Date(dateOfBirth.toString()) : undefined,
       bio: bio || "",
       address: address || "",
       phoneNumber: phoneNumber || "",
@@ -94,8 +100,58 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
     }
   };
 
-  const onSubmit = (data: Partial<IUser>) => {
-    console.log(data);
+  const onSubmit = async (data: Partial<IUser>) => {
+    setIsLoading(true);
+
+    let areTheSame = true;
+
+    for (const key in data) {
+      const profileValue =
+        profileData[key as keyof typeof profileData] !== undefined
+          ? profileData[key as keyof typeof profileData]
+          : "";
+
+      const dataValue = data[key as keyof typeof data];
+      if (
+        profileData !== null &&
+        dataValue !== "" &&
+        profileValue !== dataValue
+      ) {
+        if (key === "dateOfBirth" && dataValue instanceof Date) {
+          if (profileValue !== dataValue.toISOString()) {
+            areTheSame = false;
+            break;
+          }
+        } else {
+          areTheSame = false;
+          break;
+        }
+      }
+    }
+
+    if (!areTheSame) {
+      try {
+        const userRes = await fetch(`/api/users/${profileData.id}`, {
+          method: "PUT",
+          body: JSON.stringify({ dto: data }),
+        });
+        if (userRes.ok) {
+          await updateSession({
+            ...session,
+            user: { ...session?.user, name: data.name },
+          });
+          router.refresh();
+        }
+      } catch (error) {
+        toast({
+          title: "Updating profile failed",
+          description: "Something went wrong... Please try again later",
+          variant: "destructive",
+        });
+      }
+    }
+
+    setIsLoading(false);
   };
 
   return (
@@ -115,6 +171,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
                 type="file"
                 accept="image/png, image/jpeg, image/jpg, image/svg, image/webp"
                 hidden
+                {...profileForm.register("image")}
                 onChange={async (e) => await handlePictureChange(e)}
               />
               <div className="w-[22px] h-[22px] flex justify-center items-center bg-black border-[1px] border-white text-white absolute bottom-0 right-0 rounded-md">
@@ -126,7 +183,7 @@ const ProfileForm = ({ profileData }: ProfileFormProps) => {
 
           <Button
             type="submit"
-            disabled={isDisabled}
+            disabled={isDisabled || isLoading ? true : false}
             className="bg-black hover:bg-black py-6 px-5 flex gap-2 transition-transform active:scale-90"
           >
             <BiSolidMessageSquareEdit className="text-[17px]" />

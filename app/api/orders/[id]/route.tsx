@@ -61,7 +61,7 @@ export const POST = async (
         itemsId: JSON.stringify(metadata.itemsId),
       },
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/profile/cart`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/profile/orders`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/profile/cart`,
     });
 

@@ -95,3 +95,12 @@ export interface IStripeMetaData {
   userId: string;
   itemsId: string[];
 }
+
+export interface IProfileForm {
+  name: string;
+  dateOfBirth?: Date;
+  phoneNumber?: string;
+  address?: string;
+  bio?: string;
+  image?: string;
+}

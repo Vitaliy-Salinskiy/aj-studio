@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
+
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
 
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -29,8 +30,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { loginSchema, registerSchema } from "@/schemas";
+
 import { IUserForm } from "@/interfaces";
+
+import { loginSchema, registerSchema } from "@/schemas";
+
 import { userFormInitialValues } from "@/constants";
 
 interface CredentialsFormProps {

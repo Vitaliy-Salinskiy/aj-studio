@@ -1,7 +1,7 @@
-import { revalidatePath, revalidateTag } from "next/cache";
-import { User as IUser } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 import { getUserById, updateUser, updateUserImage } from "@/lib/requests";
+import { IProfileForm } from "@/interfaces";
 
 export const GET = async (
   _request: Request,
@@ -64,7 +64,7 @@ export const PUT = async (
 
   const body = await request.json();
 
-  const { dto }: { dto: Partial<IUser> } = body;
+  const { dto }: { dto: IProfileForm } = body;
 
   if (!id || !dto) {
     return new Response("Invalid data", { status: 400 });

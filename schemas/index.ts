@@ -91,9 +91,8 @@ export const profileSchema = z.object({
     .min(25, { message: "Bio must be at least 25 characters" })
     .max(2500, { message: "Bio must be at most 2500 characters" })
     .or(z.literal("")),
-  profileImage: z.string().url(),
+  image: z.string().url().optional(),
   address: addressSchema,
   dateOfBirth: z.date().optional(),
-  image: z.string().url().optional(),
   phoneNumber: phoneNumberSchema.optional(),
 });
