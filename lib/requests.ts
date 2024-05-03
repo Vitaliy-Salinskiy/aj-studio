@@ -220,6 +220,22 @@ export const addItemToWishlist = async (productId: string, userId: string) => {
   }
 };
 
+export const removeItemFromWishlist = async (
+  productId: string,
+  userId: string
+) => {
+  try {
+    return await prisma.wishlist.deleteMany({
+      where: {
+        productId,
+        userId,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getWishedItemsByUserId = async (id: string) => {
   try {
     return await prisma.wishlist.findMany({

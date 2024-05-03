@@ -1,8 +1,12 @@
-import { Product as IProduct } from "@prisma/client";
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 
 import ProductController from "@/components/shared/ProductController";
+import { options } from "@/app/api/auth/[...nextauth]/options";
+
+import { ExtendedWishlist } from "@/interfaces";
+import { Product as IProduct } from "@prisma/client";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -20,6 +24,18 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 
 const page = async (url: any) => {
   const { id } = url.params;
+
+  const session = await getServerSession(options);
+
+  const wishlistData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/wishlist/${session?.user.id}`
+  );
+  const wishlistItems: ExtendedWishlist[] = await wishlistData.json();
+
+  const isWished = wishlistItems.some(
+    (item: ExtendedWishlist) => item.productId === id
+  );
+
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`
   );
@@ -48,7 +64,7 @@ const page = async (url: any) => {
               <h1 className="text-3xl font-semibold">{product.name}</h1>
               <p className="text-base ">{product.description}</p>
             </div>
-            <ProductController product={product} />
+            <ProductController isWished={isWished} product={product} />
           </div>
         </div>
       </div>

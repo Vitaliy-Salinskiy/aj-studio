@@ -14,9 +14,10 @@ import { getDiscountPrice } from "@/utils";
 
 interface ProductControllerProps {
   product: IProduct;
+  isWished: boolean;
 }
 
-const ProductController = ({ product }: ProductControllerProps) => {
+const ProductController = ({ product, isWished }: ProductControllerProps) => {
   const { data: session } = useSession();
   const router = useRouter();
   const { toast } = useToast();
@@ -24,6 +25,7 @@ const ProductController = ({ product }: ProductControllerProps) => {
   const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
   const [discountPrice, setDiscountPrice] = useState<string>();
   const [quantity, setQuantity] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setDiscountPrice(
@@ -42,6 +44,8 @@ const ProductController = ({ product }: ProductControllerProps) => {
   };
 
   const handleAddToCart = async (): Promise<void> => {
+    setIsLoading(true);
+
     const dto: OrderItemDto = {
       productId: product.id,
       color: selectedColor,
@@ -67,30 +71,49 @@ const ProductController = ({ product }: ProductControllerProps) => {
         description: "Something went wrong",
       });
     }
+
+    setIsLoading(false);
   };
 
   const handleWishlist = async (): Promise<void> => {
+    setIsLoading(true);
+
     const data = {
       userId: session?.user.id,
       productId: product.id,
     };
 
-    const res = await fetch("/api/wishlist", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    let res;
+    let type = isWished ? "DELETE" : "POST";
 
-    if (res.ok) {
-      toast({
-        title: "Added to wishlist",
-        description: "Product added to wishlist successfully",
+    if (!isWished) {
+      res = await fetch("/api/wishlist", {
+        method: "POST",
+        body: JSON.stringify(data),
       });
     } else {
-      toast({
-        title: "Added to wishlist",
-        description: "Product already in wishlist",
+      res = await fetch("/api/wishlist", {
+        method: "DELETE",
+        body: JSON.stringify(data),
       });
     }
+    if (res.ok) {
+      toast({
+        title: type === "POST" ? "Added to wishlist" : "Removed from wishlist",
+        description:
+          type === "POST"
+            ? "Product added to wishlist"
+            : "Product removed from wishlist",
+      });
+      router.refresh();
+    } else {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again later...",
+      });
+    }
+
+    setIsLoading(false);
   };
 
   return (
@@ -147,15 +170,19 @@ const ProductController = ({ product }: ProductControllerProps) => {
           <div className="w-[calc(100%-56px)]">
             <Button
               className="text-white bg-black hover:bg-black w-full h-[50px] disabled:opacity-90"
-              disabled={!session?.user}
+              disabled={!session?.user || isLoading ? true : false}
               onClick={() => handleAddToCart()}
             >
               Add to Cart
             </Button>
           </div>
-
           <Button
-            className="ml-auto border h-12 w-12 rounded-lg border-black hover:bg-black transition-colors hover:text-red-500 flex justify-center items-center cursor-pointer p-0 bg-transparent text-black"
+            disabled={isLoading}
+            className={`ml-auto border h-12 w-12 rounded-lg border-black ${
+              isWished
+                ? "text-red-500 bg-black hover:text-black hover:bg-transparent"
+                : "text-black bg-transparent hover:text-red-500 hover:bg-black"
+            } transition-colors  flex justify-center items-center cursor-pointer p-0`}
             onClick={() => handleWishlist()}
           >
             <MdOutlineBookmarkAdd className="text-xl transition-colors duration-100" />
