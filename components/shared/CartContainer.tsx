@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 import OrderItem from "@/components/shared/CartItem";
 import { Button } from "@/components/ui/button";
@@ -14,6 +13,10 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 );
 
+interface CartExtendedOrderItem extends ExtendedOrderItem {
+  isRemoved: boolean;
+}
+
 interface CartContainerProps {
   ordersItems: ExtendedOrderItem[];
   userId: string;
@@ -21,29 +24,52 @@ interface CartContainerProps {
 
 const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
   const [totals, setTotals] = useState({ discount: 0, total: 0 });
+  const [isDisabled, setIsDisabled] = useState(false);
   const { toast } = useToast();
-  const router = useRouter();
+
+  const [transformedOrdersItems, setTransformedOrdersItems] = useState<
+    CartExtendedOrderItem[]
+  >([]);
 
   useEffect(() => {
-    const newTotals = ordersItems.reduce(
-      (acc, item) => {
-        const discountedPrice =
-          item.product.price -
-          (item.product.price * item.product.discount) / 100;
-        return {
-          discount: acc.discount + discountedPrice * item.quantity,
-          total: acc.total + item.product.price * item.quantity,
-        };
-      },
-      { discount: 0, total: 0 }
+    setTransformedOrdersItems(
+      ordersItems.map((item) => ({ ...item, isRemoved: false }))
     );
-
-    setTotals(newTotals);
   }, [ordersItems]);
 
+  useEffect(() => {
+    const newTotals = transformedOrdersItems
+      .filter((item: CartExtendedOrderItem) => !item.isRemoved)
+      .reduce(
+        (acc, item) => {
+          const discountedPrice =
+            item.product.price -
+            (item.product.price * item.product.discount) / 100;
+          return {
+            discount: acc.discount + discountedPrice * item.quantity,
+            total: acc.total + item.product.price * item.quantity,
+          };
+        },
+        { discount: 0, total: 0 }
+      );
+
+    setTotals(newTotals);
+  }, [transformedOrdersItems]);
+
+  const handleChange = (id: string): void => {
+    setTransformedOrdersItems((prev) =>
+      prev
+        .filter((item: CartExtendedOrderItem) => !item.isRemoved)
+        .map((item) =>
+          item.id === id ? { ...item, isRemoved: !item.isRemoved } : item
+        )
+    );
+  };
+
   const handleOrderCreate = async () => {
-    const stipeItems: IStripeItem[] = ordersItems.map(
-      (item: ExtendedOrderItem) => {
+    const stipeItems: IStripeItem[] = transformedOrdersItems
+      .filter((item: CartExtendedOrderItem) => !item.isRemoved)
+      .map((item: CartExtendedOrderItem) => {
         return {
           price_data: {
             currency: "usd",
@@ -55,12 +81,13 @@ const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
           },
           quantity: item.quantity,
         };
-      }
-    );
+      });
 
     const metadata: IStripeMetaData = {
       userId,
-      itemsId: ordersItems.map((item: ExtendedOrderItem) => item.id),
+      itemsId: transformedOrdersItems
+        .filter((item: CartExtendedOrderItem) => !item.isRemoved)
+        .map((item: CartExtendedOrderItem) => item.id),
     };
 
     const res = await fetch(`/api/orders/${userId}`, {
@@ -96,12 +123,19 @@ const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-5">
-        {ordersItems.length > 0 ? (
-          ordersItems
-            // .reverse() // bug here
+      <div className="flex flex-col-reverse gap-5">
+        {transformedOrdersItems.filter((item) => !item.isRemoved).length > 0 ? (
+          transformedOrdersItems
+            .filter((item: CartExtendedOrderItem) => !item.isRemoved)
             .map((item: any, index: number) => (
-              <OrderItem orderItem={item} userId={userId} key={index + item} />
+              <OrderItem
+                setIsRemoved={handleChange}
+                orderItem={item}
+                userId={userId}
+                isDisabled={isDisabled}
+                setIsDisabled={setIsDisabled}
+                key={index + item}
+              />
             ))
         ) : (
           <p className="text-3xl text-center min-h-80 flex items-center justify-center">
@@ -109,7 +143,7 @@ const CartContainer = ({ ordersItems, userId }: CartContainerProps) => {
           </p>
         )}
       </div>
-      {ordersItems.length > 0 && (
+      {transformedOrdersItems.filter((item) => !item.isRemoved).length > 0 && (
         <div className="flex flex-col gap-2">
           <h2 className="text-[26px] sm:text-[29px] font-bold flex gap-2">
             Total:{" "}

@@ -25,6 +25,7 @@ const ProductController = ({ product, isWished }: ProductControllerProps) => {
   const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
   const [discountPrice, setDiscountPrice] = useState<string>();
   const [quantity, setQuantity] = useState<number>(1);
+  const [isWishedBy, setIsWishedBy] = useState<boolean>(isWished);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -58,13 +59,13 @@ const ProductController = ({ product, isWished }: ProductControllerProps) => {
     });
 
     if (res.ok) {
+      router.refresh();
       toast({
         title: "Added to cart",
         description: "Product added to cart successfully",
       });
       setSelectedColor(product.colors[0]);
       setQuantity(1);
-      router.refresh();
     } else {
       toast({
         title: "Added to cart",
@@ -78,15 +79,17 @@ const ProductController = ({ product, isWished }: ProductControllerProps) => {
   const handleWishlist = async (): Promise<void> => {
     setIsLoading(true);
 
+    setIsWishedBy((prev) => !prev);
+
     const data = {
       userId: session?.user.id,
       productId: product.id,
     };
 
     let res;
-    let type = isWished ? "DELETE" : "POST";
+    let type = isWishedBy ? "DELETE" : "POST";
 
-    if (!isWished) {
+    if (!isWishedBy) {
       res = await fetch("/api/wishlist", {
         method: "POST",
         body: JSON.stringify(data),
@@ -98,6 +101,7 @@ const ProductController = ({ product, isWished }: ProductControllerProps) => {
       });
     }
     if (res.ok) {
+      router.refresh();
       toast({
         title: type === "POST" ? "Added to wishlist" : "Removed from wishlist",
         description:
@@ -105,7 +109,6 @@ const ProductController = ({ product, isWished }: ProductControllerProps) => {
             ? "Product added to wishlist"
             : "Product removed from wishlist",
       });
-      router.refresh();
     } else {
       toast({
         title: "Something went wrong",
@@ -178,10 +181,10 @@ const ProductController = ({ product, isWished }: ProductControllerProps) => {
           </div>
           <Button
             disabled={isLoading}
-            className={`ml-auto border h-12 w-12 rounded-lg border-black ${
-              isWished
-                ? "text-red-500 bg-black hover:text-black hover:bg-transparent"
-                : "text-black bg-transparent hover:text-red-500 hover:bg-black"
+            className={`ml-auto border h-12 w-12 rounded-lg border-black disabled:opacity-70 ${
+              isWishedBy
+                ? "text-red-500 !bg-black"
+                : "text-black !bg-transparent"
             } transition-colors  flex justify-center items-center cursor-pointer p-0`}
             onClick={() => handleWishlist()}
           >

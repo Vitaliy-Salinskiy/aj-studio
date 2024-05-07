@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import CartContainer from "@/components/shared/CartContainer";
+
 import { ExtendedOrderItem } from "@/interfaces";
 
 export const metadata: Metadata = {

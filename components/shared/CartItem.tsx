@@ -7,37 +7,60 @@ import { Button } from "@/components/ui/button";
 import { ExtendedOrderItem } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
 import { getDiscountPrice } from "@/utils";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface OrderItemProps {
   orderItem: ExtendedOrderItem;
   userId: string;
+  isDisabled: boolean;
+  setIsDisabled: Dispatch<SetStateAction<boolean>>;
+  setIsRemoved: (id: string) => void;
 }
 
-const CartItem = ({ orderItem }: OrderItemProps) => {
+const CartItem = ({
+  orderItem,
+  isDisabled,
+  setIsDisabled,
+  setIsRemoved,
+}: OrderItemProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
+  const [isRemovedBy, setIsRemovedBy] = useState<boolean>(false);
+
   const handleRemove = async () => {
+    setIsDisabled(true);
+
+    setIsRemovedBy(true);
+    setIsRemoved(orderItem.id);
+
     const res = await fetch(`/api/cart/clear/${orderItem.id}`, {
       method: "POST",
     });
 
     if (res.ok) {
+      router.refresh();
       toast({
         title: "Your cart",
         description: `Product was deleted successfully`,
       });
-      router.refresh();
     } else {
+      setIsRemoved(orderItem.id);
       toast({
         title: "Your cart",
         description: "Something went wrong... Please try again later",
       });
     }
+
+    setTimeout(() => setIsDisabled(false), 125);
   };
 
   return (
-    <div className={`flex flex-col border-gray-300 border-b pb-5`}>
+    <div
+      className={`flex flex-col border-gray-300 border-b pb-5 ${
+        isRemovedBy && "hidden"
+      }`}
+    >
       <div className="flex flex-col gap-3 sm:gap-0 sm:flex-row justify-between items-center">
         <div className="flex gap-2 flex-[3]">
           <Image
@@ -85,7 +108,8 @@ const CartItem = ({ orderItem }: OrderItemProps) => {
 
           <div className="flex flex-col gap-2">
             <Button
-              className="border border-red-500 hover:bg-transparent hover:text-red-500"
+              disabled={isDisabled}
+              className="border border-red-500 hover:bg-transparent hover:text-red-500 disabled:opacity-75"
               onClick={async () => await handleRemove()}
             >
               Remove from cart
