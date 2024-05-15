@@ -88,14 +88,6 @@ const Order = ({ order }: OrderProps) => {
             </div>
           ))}
       </div>
-      <div>
-        <Link
-          className="bg-black py-2 px-5 text-white transition-colors hover:bg-transparent border border-black hover:text-black rounded-md text-sm"
-          href={`/orders/${order.id}`}
-        >
-          View Details
-        </Link>
-      </div>
     </div>
   );
 };

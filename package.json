@@ -53,7 +53,7 @@
     "react-select": "^5.8.0",
     "react-vertical-timeline-component": "^3.6.0",
     "stripe": "^15.4.0",
-    "swiper": "^11.1.1",
+    "swiper": "10.3.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4",

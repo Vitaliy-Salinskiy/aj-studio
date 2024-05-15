@@ -95,8 +95,7 @@ export const PUT = async (
 
     revalidatePath("/(main)/profile/orders");
     revalidatePath("/(main)/profile/cart");
-    revalidatePath("/(main)/orders/[id]");
-    revalidatePath("/(main)/admin/orders");
+    revalidatePath("/admin/orders");
 
     if (order) {
       await clearCart(id);
