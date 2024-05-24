@@ -54,8 +54,6 @@ export const DELETE = async (
     return Response.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  console.log(id);
-
   try {
     const deletedProduct = await deleteProduct(id);
 
@@ -72,7 +70,6 @@ export const DELETE = async (
 
     return Response.json({ deletedProduct }, { status: 200 });
   } catch (error) {
-    console.error("Error in deleteProduct:", error);
     return new Response(JSON.stringify({ message: "Something went wrong" }), {
       status: 500,
     });

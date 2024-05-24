@@ -25,8 +25,6 @@ export const DELETE = async (request: NextRequest) => {
 
   const { productId, userId } = body;
 
-  console.log(productId, userId);
-
   if (!productId || !userId) {
     return NextResponse.json("Invalid request", { status: 400 });
   }

@@ -1,7 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    reactCompiler: true,
+  },
   images: {
-    domains: ["files.edgestore.dev", "utfs.io"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "files.edgestore.dev",
+        port: "",
+      },
+    ],
   },
 };
 

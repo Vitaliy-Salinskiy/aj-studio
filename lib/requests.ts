@@ -56,7 +56,6 @@ export const deleteProduct = async (id: string) => {
       },
     });
   } catch (error) {
-    console.error("Error in deleteProduct:", error);
     throw error;
   }
 };
@@ -124,7 +123,6 @@ export const createOrderItem = async (dto: OrderItemDto, userId: string) => {
       },
     });
   } catch (error) {
-    console.error("Error in createOrderItem:", error);
     throw error;
   }
 };

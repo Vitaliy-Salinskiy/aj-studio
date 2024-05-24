@@ -38,6 +38,7 @@ export const SliderItem = ({
             src={image}
             alt={title + description + image}
             fill
+            priority
             className="z-20"
           />
           <p

@@ -137,7 +137,6 @@ const ProductForm = ({ product }: ProductFormProps) => {
   };
 
   const createProduct = async (dto: ProductDto, id: string) => {
-    console.log("dto", dto, id);
     const response = await fetch("/api/products", {
       method: "POST",
       headers: {
@@ -217,7 +216,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
                       <Input
                         {...field}
                         value={field.value}
-                        placeholder="New Jeans"
+                        placeholder="New Snickers"
                         className={`${
                           form.formState.errors.name
                             ? "border-red-500 text-red-500 placeholder:text-red-500"
@@ -395,7 +394,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
                   <FormControl>
                     <Textarea
                       {...field}
-                      placeholder="New 2024 Jeans with a new design and rgba lighting, perfect for the summer. Available in all sizes and colors. Only for a limited time! Get yours now! Order now!  New 2024 Jeans with a new design and rgba lighting, perfect for the summer. Available in all sizes and colors. Only for a limited time! Get yours now! Order now! New 2024 Jeans with a new design and rgba lighting, perfect for the summer. Available in all sizes and colors. Only for a limited time! Get yours now! Order now! New 2024 Jeans with a new design and rgba lighting, perfect for the summer. Available in all sizes and colors. Only for a limited time! Get yours now! Order now!"
+                      placeholder="New 2024 Snickers with a new design and rgba lighting, perfect for the summer. Available in all sizes and colors. Only for a limited time! Get yours now! Order now!  New 2024 Snickers with a new design and rgba lighting, perfect for the summer. Available in all sizes and colors. Only for a limited time! Get yours now! Order now! New 2024 Snickers with a new design and rgba lighting, perfect for the summer. Available in all sizes and colors. Only for a limited time! Get yours now! Order now! New 2024 Snickers with a new design and rgba lighting, perfect for the summer. Available in all sizes and colors. Only for a limited time! Get yours now! Order now!"
                       className={`${
                         form.formState.errors.description
                           ? "border-red-500 text-red-500 placeholder:text-red-500"

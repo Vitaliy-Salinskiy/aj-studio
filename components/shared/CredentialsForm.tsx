@@ -52,7 +52,6 @@ const CredentialsForm = ({ isExtended }: CredentialsFormProps) => {
 
   const onSubmit = async (data: IUserForm) => {
     if (isExtended) {
-      console.log("By credentials", data);
       const { confirmPassword, ...dto } = data;
 
       const res = await fetch("/api/users", {

@@ -37,9 +37,7 @@ const FooterForm = () => {
       } else {
         alert("Failed to subscribe");
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   return (

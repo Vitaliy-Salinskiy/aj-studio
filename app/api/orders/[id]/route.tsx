@@ -67,7 +67,6 @@ export const POST = async (
 
     return NextResponse.json({ sessionId: session.id }, { status: 200 });
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 500 }
@@ -103,7 +102,6 @@ export const PUT = async (
 
     return new Response(JSON.stringify({ order }));
   } catch (error) {
-    console.error(error);
     return new Response(JSON.stringify({ message: "Something went wrong" }), {
       status: 500,
     });

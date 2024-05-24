@@ -13,8 +13,6 @@ const page = async () => {
 
   const orders: ExtendedOrder[] = await data.json();
 
-  console.log(orders);
-
   return (
     <section>
       <div className="flex flex-col gap-4">

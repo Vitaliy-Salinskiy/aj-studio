@@ -4,7 +4,6 @@ export const GET = async (
   request: Request,
   { params }: { params: { id: string } }
 ) => {
-  console.log("fired");
   const { id } = params;
 
   if (!id) {
