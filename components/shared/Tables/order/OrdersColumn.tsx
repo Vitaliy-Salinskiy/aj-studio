@@ -59,12 +59,6 @@ export const OrderColumn: ColumnDef<AdminOrder>[] = [
           method: "PUT",
           body: JSON.stringify({ status: value }),
         });
-
-        if (res.ok) {
-          alert("Order status updated successfully");
-        } else {
-          alert("Failed to update order status");
-        }
       };
 
       return (

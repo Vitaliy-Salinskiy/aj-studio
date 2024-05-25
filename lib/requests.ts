@@ -176,6 +176,26 @@ export const createOrder = async (userId: string, orderItems: string[]) => {
   try {
     const orderNumber = orderId("adapter").generate().split("-").join("");
 
+    await Promise.all(
+      orderItems.map(
+        async (id) =>
+          await prisma.orderItem.update({
+            where: {
+              id,
+            },
+            data: {
+              product: {
+                update: {
+                  sales: {
+                    increment: 1,
+                  },
+                },
+              },
+            },
+          })
+      )
+    );
+
     return await prisma.order.create({
       data: {
         userId,
